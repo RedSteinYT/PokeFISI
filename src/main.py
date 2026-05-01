@@ -1,0 +1,524 @@
+import tkinter as tk
+from tkinter import messagebox
+import json
+import os
+import sys
+import random
+from PIL import Image, ImageTk, ImageSequence
+import pygame
+from pokemones import all_pokemons
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.dirname(BASE_DIR))
+
+def path(*r):
+    return os.path.join(BASE_DIR, "..", *r)
+
+# ==========================================
+# DATA
+# ==========================================
+def cargar():
+    try:
+        with open(path("data", "pokemons.json"), encoding="utf-8") as f:
+            return json.load(f)
+    except Exception as e:
+        print(f"Error cargando JSON: {e}")
+        return []
+
+POKEMONS = cargar()
+
+
+def normalize_name(nombre):
+    return nombre.strip().lower() if isinstance(nombre, str) else ""
+
+
+def obtener_pokemon_objeto(nombre_pokemon):
+    """Busca el objeto Pokemon correspondiente por nombre"""
+    normalized = normalize_name(nombre_pokemon)
+    return next((p for p in all_pokemons if normalize_name(p.nombre) == normalized), None)
+
+
+def cargar_pokemons_json_por_nombre():
+    """Carga los datos del JSON de pokemons y mapea por nombre en minúsculas."""
+    datos = {}
+    try:
+        with open(path("data", "pokemons.json"), encoding="utf-8") as f:
+            for entrada in json.load(f):
+                datos[normalize_name(entrada.get("name", ""))] = entrada
+    except Exception as e:
+        print(f"Error cargando JSON de pokemons: {e}")
+    return datos
+
+
+def crear_datos_pokemon_para_equipo(nombre_pokemon, posicion, pokemons_json):
+    obj = obtener_pokemon_objeto(nombre_pokemon)
+    if obj is None:
+        return None
+
+    json_entry = pokemons_json.get(normalize_name(obj.nombre), {})
+    moves = []
+    for mov in json_entry.get("moves", []):
+        moves.append({
+            "name": mov.get("name", ""),
+            "power": mov.get("power", 0),
+            "accuracy": mov.get("accuracy", 100),
+            "type": mov.get("type", "Normal"),
+            "category": mov.get("category", "physical"),
+        })
+
+    return {
+        "name": obj.nombre,
+        "tipo1": obj.type1,
+        "tipo2": obj.type2,
+        "hp": obj.ps,
+        "atk": obj.atck,
+        "def": obj.dfns,
+        "spat": obj.spat,
+        "spdf": obj.spdf,
+        "spe": obj.vel,
+        "gender": obj.gender,
+        "state": None,
+        "position": posicion,
+        "img_mini": json_entry.get("img_mini", ""),
+        "img_large_gif": json_entry.get("img_large_gif", ""),
+        "img_back": json_entry.get("img_back", ""),
+        "moves": moves,
+    }
+
+
+def crear_equipos_json(nombres_jugador):
+    pokemons_json = cargar_pokemons_json_por_nombre()
+    equipo_jugador = []
+    for idx, nombre in enumerate(nombres_jugador, start=1):
+        datos = crear_datos_pokemon_para_equipo(nombre, idx, pokemons_json)
+        if datos:
+            equipo_jugador.append(datos)
+
+    nombres_todos = [normalize_name(p.nombre) for p in all_pokemons]
+    nombres_disponibles = [n for n in nombres_todos if n not in [normalize_name(x) for x in nombres_jugador]]
+    nombres_ia = random.sample(nombres_disponibles or nombres_todos, k=4)
+
+    equipo_ia = []
+    for idx, nombre in enumerate(nombres_ia, start=1):
+        datos = crear_datos_pokemon_para_equipo(nombre, idx, pokemons_json)
+        if datos:
+            equipo_ia.append(datos)
+
+    equipos = {
+        "team_jugador": equipo_jugador,
+        "team_ia": equipo_ia,
+    }
+
+    try:
+        with open(path("data", "equipos.json"), "w", encoding="utf-8") as f:
+            json.dump(equipos, f, ensure_ascii=False, indent=2)
+    except Exception as e:
+        print(f"Error escribiendo equipos.json: {e}")
+
+    return equipos
+
+# ==========================================
+# GIF ANIMATOR
+# ==========================================
+class AnimatedGIF(tk.Label):
+    def __init__(self, master, gif_path, size=(300, 300), bg_color="#ffffff"):
+        super().__init__(master, bg=bg_color)
+        self.frames = []
+        self.idx = 0
+
+        try:
+            img = Image.open(gif_path)
+            for f in ImageSequence.Iterator(img):
+                f = f.convert("RGBA").resize(size, Image.Resampling.LANCZOS)
+                self.frames.append(ImageTk.PhotoImage(f))
+        except Exception as e:
+            print(f"Error cargando GIF {gif_path}: {e}")
+
+        if self.frames:
+            self.animate()
+        else:
+            self.config(text="[Imagen no encontrada]", fg="black")
+
+    def animate(self):
+        if self.frames:
+            self.config(image=self.frames[self.idx])
+            self.idx = (self.idx + 1) % len(self.frames)
+            self.after(50, self.animate)
+
+# ==========================================
+# APP PRINCIPAL
+# ==========================================
+class App:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Pokefisi Pro - Selection Screen")
+        self.root.geometry("1280x720") 
+        
+        # --- Colores Globales Corregidos ---
+        self.bg_main = "#f4fcf2"       # para el fondo flotante
+        self.bg_panel = "#c4d6c7"      
+        
+        self.text_title = "#123D06"    
+        self.text_stats = "#80917a"    
+        
+        self.accent_green = "#22c55e"  
+        self.accent_black = "#050404"    
+    
+        self.accent_yellow = "#facc15" 
+        self.accent_blue = "#3b82f6"   
+
+        # Paleta de colores vibrantes para el Carrusel y Equipo
+        self.paleta_vibrante = ["#82faae", "#ff7e7e", "#ffe785", "#84d3f5", "#d483ff", "#8279ff"]
+        
+        # Asignar un color a cada Pokémon por su ID para mantener consistencia
+        self.poke_colors = {}
+        for i, p in enumerate(POKEMONS):
+            self.poke_colors[p["id"]] = self.paleta_vibrante[i % len(self.paleta_vibrante)]
+
+        self.root.configure(bg=self.bg_main)
+
+        self.selected = []
+        self.current = POKEMONS[0]["id"] if POKEMONS else None
+        self.cache = {}
+
+        # Inicializar pygame.mixer para música
+        try:
+            pygame.mixer.init()
+            self._iniciar_musica_seleccion()
+        except Exception as e:
+            print(f"Error inicializando audio: {e}")
+
+        if not POKEMONS:
+            messagebox.showerror("Error", "No se encontraron datos en pokemons.json")
+            return
+
+        self.build_ui()
+        self.update_all()
+
+    # ==========================================
+    # MÚSICA
+    # ==========================================
+    def _iniciar_musica_seleccion(self):
+        try:
+            ruta_musica = path("assets", "music", "seleccion.mp3")
+            if os.path.exists(ruta_musica):
+                pygame.mixer.music.load(ruta_musica)
+                pygame.mixer.music.play(-1)  # -1 para bucle infinito
+        except Exception as e:
+            print(f"Error reproduciendo música de selección: {e}")
+
+    def _detener_musica(self):
+        try:
+            if pygame.mixer.music.get_busy():
+                pygame.mixer.music.stop()
+        except Exception as e:
+            print(f"Error deteniendo música: {e}")
+
+    # ==========================================
+    # IMG CACHE
+    # ==========================================
+    def img(self, ruta, size, key):
+        if key in self.cache:
+            return self.cache[key]
+        try:
+            i = Image.open(path(ruta)).convert("RGBA")
+            i = i.resize(size, Image.Resampling.LANCZOS)
+            p = ImageTk.PhotoImage(i)
+            self.cache[key] = p
+            return p
+        except Exception as e:
+            print(f"Error imagen estática: {e}")
+            return None
+
+    # ==========================================
+    # EVENTOS HOVER
+    # ==========================================
+    def bind_hover(self, widget, color_normal, color_hover):
+        widget.bind("<Enter>", lambda e: widget.config(bg=color_hover))
+        widget.bind("<Leave>", lambda e: widget.config(bg=color_normal))
+
+    # ==========================================
+    # UI
+    # ==========================================
+    def build_ui(self):
+        # -------- IZQ (Información)
+        self.left = tk.Frame(self.root, bg=self.bg_main)
+        self.left.place(relx=0.05, rely=0.1, relwidth=0.25, relheight=0.6)
+
+        self.lbl_name = tk.Label(self.left, font=("Helvetica Neue", 38, "bold"), fg=self.text_title, bg=self.bg_main, anchor="w")
+        self.lbl_name.pack(fill="x", pady=(0, 10))
+
+        self.lbl_stats = tk.Label(self.left, font=("Courier New", 14, "bold"), fg=self.text_stats, bg=self.bg_main, justify="left", anchor="w")
+        self.lbl_stats.pack(fill="x", pady=10)
+
+        # -------- CENTRO (Animación)
+        self.center = tk.Frame(self.root, bg=self.bg_main)
+        self.center.place(relx=0.35, rely=0.1, relwidth=0.30, relheight=0.55)
+
+        self.gif = None
+
+        self.btn_add = tk.Button(self.root, text="✦ AÑADIR AL EQUIPO ✦", bg=self.accent_green, fg="white", font=("Arial", 14, "bold"), bd=0, cursor="hand2", padx=20, pady=10, command=self.add)
+        self.btn_add.place(relx=0.5, rely=0.68, anchor="center")
+        self.bind_hover(self.btn_add, self.accent_green, "#6fdd67")
+
+        # -------- DERECHA (Equipo Seleccionado)
+        self.right = tk.Frame(self.root, bg=self.bg_main, bd=0)
+        self.right.place(relx=0.70, rely=0.1, relwidth=0.25, relheight=0.55)
+
+        tk.Label(self.right, text="¡Tus Pokemones Elegidos!", fg=self.text_title, bg=self.bg_main, font=("Arial", 20, "bold"), pady=15).pack()
+
+        self.team_frame = tk.Frame(self.right, bg=self.bg_main)
+        self.team_frame.pack(fill="both", expand=True, padx=10)
+
+        self.btn_team = tk.Button(self.root, text="VER EQUIPO (0/4)", bg=self.accent_green, fg="white", font=("Arial", 13, "bold"), bd=0, cursor="hand2", padx=20, pady=10, command=self.ver_equipo)
+        self.btn_team.place(relx=0.95, rely=0.04, anchor="ne")
+        self.bind_hover(self.btn_team, self.accent_green, "#4ade80")
+
+        # ---- NUEVO BOTÓN / boton para iniciar batalla :p ----
+        self.btn_batalla = tk.Button(self.root, text="⚔️ COMENZAR BATALLA", bg="#e3350d", fg="white", 
+                                    font=("Arial", 16, "bold"), bd=0, cursor="hand2", padx=20, pady=10, 
+                                    command=self.iniciar_batalla)
+        self.btn_batalla.place(relx=0.5, rely=0.08, anchor="center")
+        self.bind_hover(self.btn_batalla, "#e3350d", "#ff5c36")
+
+        # -------- CARRUSEL INFERIOR
+        self.carousel_container = tk.Frame(self.root, bg=self.bg_panel)
+        self.carousel_container.place(relx=0, rely=0.78, relwidth=1, relheight=0.22)
+
+        btn_izq = tk.Button(self.carousel_container, text="◀", font=("Arial", 35, "bold"), bg=self.bg_panel, fg=self.text_title, bd=0, cursor="hand2", command=lambda: self.canvas.xview_scroll(-2, "units"), width=3)
+        btn_izq.pack(side="left", fill="y")
+        self.bind_hover(btn_izq, self.bg_panel, "#46774b")
+
+        self.canvas = tk.Canvas(self.carousel_container, bg=self.bg_panel, highlightthickness=0)
+        self.canvas.pack(side="left", fill="both", expand=True)
+
+        btn_der = tk.Button(self.carousel_container, text="▶", font=("Arial", 35, "bold"), bg=self.bg_panel, fg=self.text_title, bd=0, cursor="hand2", command=lambda: self.canvas.xview_scroll(2, "units"), width=3)
+        btn_der.pack(side="right", fill="y")
+        self.bind_hover(btn_der, self.bg_panel, "#46774b")
+
+        self.inner = tk.Frame(self.canvas, bg=self.bg_panel)
+        self.canvas.create_window((0,0), window=self.inner, anchor="nw")
+
+        self.items = []
+
+        for p in POKEMONS:
+            color_fondo = self.poke_colors[p["id"]]
+            f = tk.Frame(self.inner, bg=color_fondo, width=100, height=130, cursor="hand2")
+            f.pack(side="left", padx=10, pady=15)
+            f.pack_propagate(False)
+
+            img = self.img(p["img_mini"], (70, 70), f"mini_{p['id']}")
+            l_img = tk.Label(f, image=img, bg=color_fondo)
+            l_img.pack(pady=(5,0))
+
+            # Texto dinámico (negro si el fondo es amarillo, blanco para los demás)
+            color_texto = "Green" if color_fondo == "#e8e8e8" else "white"
+            l_txt = tk.Label(f, text=p["name"].upper(), fg=color_texto, bg=color_fondo, font=("Arial", 10, "bold"))
+            l_txt.pack()
+
+            badge = tk.Label(f, bg="green", fg="white", font=("Arial", 15, "bold"))
+
+            for w in [f, l_img, l_txt]:
+                w.bind("<Button-1>", lambda e, id=p["id"]: self.select(id))
+
+            self.items.append({"id": p["id"], "frame": f, "lbls": [l_img, l_txt], "badge": badge, "default_bg": color_fondo, "text_color": color_texto})
+
+        self.inner.bind("<Configure>", lambda e: self.canvas.configure(scrollregion=self.canvas.bbox("all")))
+
+    # ==========================================
+    # UPDATE
+    # ==========================================
+    def update_all(self):
+        p = next(x for x in POKEMONS if x["id"] == self.current)
+
+        self.lbl_name.config(text=p["name"].upper())
+
+        # Obtener los datos del objeto Pokemon en lugar del JSON
+        poke_obj = obtener_pokemon_objeto(p["name"])
+        
+        if poke_obj:
+            # Construir el tipo (type1/type2)
+            tipo_str = poke_obj.type1.upper()
+            if poke_obj.type2 and poke_obj.type2.lower() != "null":
+                tipo_str += f"/{poke_obj.type2.upper()}"
+            
+            stats_txt = (
+                f"TIPO: {tipo_str}\n"
+                f"{'-'*20}\n"
+                f"HP  : {poke_obj.ps:>4}\n"
+                f"ATK : {poke_obj.atck:>4}\n"
+                f"DEF : {poke_obj.dfns:>4}\n"
+                f"SPAT: {poke_obj.spat:>4}\n"
+                f"SPDF: {poke_obj.spdf:>4}\n"
+                f"SPD : {poke_obj.vel:>4}"
+            )
+        else:
+            # Fallback a datos del JSON si no se encuentra el objeto
+            s = p["stats"]
+            stats_txt = (
+                f"TIPO: {p.get('tipo', 'Normal').upper()}\n"
+                f"{'-'*20}\n"
+                f"HP  : {s['hp']:>4}\n"
+                f"ATK : {s['atk']:>4}\n"
+                f"DEF : {s['def']:>4}\n"
+                f"SPD : {s['spe']:>4}"
+            )
+        self.lbl_stats.config(text=stats_txt)
+
+        if self.gif:
+            self.gif.destroy()
+
+        self.gif = AnimatedGIF(self.center, path(p["img_large_gif"]), size=(360, 360), bg_color=self.bg_main)
+        self.gif.pack(expand=True)
+
+        self.update_team()
+        self.update_badges()
+        self.update_carousel_selection()
+
+        self.btn_team.config(text=f"VER EQUIPO ({len(self.selected)}/4)")
+
+    def update_carousel_selection(self):
+        """Resalta el Pokémon seleccionado poniéndolo en color blanco"""
+        for it in self.items:
+            if it["id"] == self.current:
+                bg_color = "#ffffff" # Blanco para el activo
+                fg_color = self.text_title # Texto azul para el activo
+            else:
+                bg_color = it["default_bg"]
+                fg_color = it["text_color"]
+                
+            it["frame"].config(bg=bg_color)
+            it["lbls"][0].config(bg=bg_color) # Imagen
+            it["lbls"][1].config(bg=bg_color, fg=fg_color) # Texto
+
+    # ==========================================
+    def update_team(self):
+        for w in self.team_frame.winfo_children():
+            w.destroy()
+
+        for i in range(4):
+            if i < len(self.selected):
+                p = next(x for x in POKEMONS if x["id"] == self.selected[i])
+                color_poke = self.poke_colors[p["id"]]
+                color_texto = "white" if color_poke == "#facc15" else "green"
+
+                # Slot Ocupado (Usa el color vibrante del Pokémon)
+                f = tk.Frame(self.team_frame, bg=color_poke, cursor="hand2")
+                f.pack(fill="x", pady=6)
+
+                tk.Label(f, text=str(i+1), bg="green", fg="white", font=("Arial", 13, "bold"), width=3).pack(side="left", fill="y")
+                
+                img = self.img(p["img_mini"], (45, 45), f"s_{p['id']}")
+                tk.Label(f, image=img, bg=color_poke).pack(side="left", padx=5)
+
+                tk.Label(f, text=p["name"].upper(), bg=color_poke, fg=color_texto, font=("Arial", 10, "bold")).pack(side="left")
+                
+                # Botón de eliminar
+                tk.Label(f, text="✖", bg=color_poke, fg="black" if color_poke=="#09cd3d" else "red", font=("Arial", 20)).pack(side="right", padx=10)
+
+                for child in f.winfo_children():
+                    child.bind("<Button-1>", lambda e, id=p["id"]: self.remove(id))
+                f.bind("<Button-1>", lambda e, id=p["id"]: self.remove(id))
+            else:
+                # Slot Vacío (PLOMO)
+                f = tk.Frame(self.team_frame, bg=self.bg_panel)
+                f.pack(fill="x", pady=6)
+                tk.Label(f, text=str(i+1), bg=self.text_stats, fg="white", font=("Arial", 10, "bold"), width=3).pack(side="left", fill="y")
+                tk.Label(f, text="[ VACÍO ]", bg=self.bg_panel, fg=self.text_stats, font=("Arial", 10), height=3).pack(side="left", padx=20)
+
+    # ==========================================
+    def update_badges(self):
+        for it in self.items:
+            if it["id"] in self.selected:
+                idx = self.selected.index(it["id"]) + 1
+                it["badge"].config(text=f" {idx} ")
+                it["badge"].place(relx=1.0, rely=0.0, anchor="ne")
+            else:
+                it["badge"].place_forget()
+
+    # ==========================================
+    # ACCIONES
+    # ==========================================
+    def select(self, pid):
+        if self.current != pid:
+            self.current = pid
+            self.update_all()
+
+    def add(self):
+        if len(self.selected) >= 4:
+            messagebox.showwarning("Límite de Equipo", "Ya tienes 4 Pokémon en tu equipo. Elimina uno para añadir otro.")
+            return
+
+        if self.current not in self.selected:
+            self.selected.append(self.current)
+            self.update_all()
+        else:
+            messagebox.showinfo("Aviso", "Este Pokémon ya está en tu equipo.")
+
+    def remove(self, pid):
+        if pid in self.selected:
+            self.selected.remove(pid)
+            self.update_all()
+
+    def ver_equipo(self):
+        nombres = [p["name"].upper() for p in POKEMONS if p["id"] in self.selected]
+        if nombres:
+            msg = "Tu alineación para la batalla:\n\n" + "\n".join(f"⭐ {n}" for n in nombres)
+            messagebox.showinfo("Equipo Confirmado", msg)
+        else:
+            messagebox.showinfo("Equipo Vacío", "Aún no has seleccionado ningún Pokémon.")
+
+    # ==========================================
+    # GESTOR DE VENTANAS (TRANSICIÓN A BATALLA)
+    # ==========================================
+    def iniciar_batalla(self):
+        if len(self.selected) < 1:
+            messagebox.showwarning("Atención", "¡Necesitas al menos 1 Pokémon en tu equipo para luchar!")
+            return
+            
+        # 0. Detener música de selección
+        self._detener_musica()
+        
+        # 1. Generar datos completos del equipo y escribir el JSON de equipos
+        nombres_jugador = [normalize_name(next(x for x in POKEMONS if x["id"] == pid)["name"]) for pid in self.selected]
+        crear_equipos_json(nombres_jugador)
+
+        # 2. Ocultar todos los frames de la pantalla de selección
+        self.left.place_forget()
+        self.center.place_forget()
+        self.right.place_forget()
+        self.carousel_container.place_forget()
+        self.btn_batalla.place_forget()
+        self.btn_add.place_forget()
+        
+        # 3. Llamar a la Pantalla de Batalla
+        from src.battle_ui import PantallaBatalla
+        
+        self.pantalla_combate = PantallaBatalla(self.root, nombres_jugador, self.volver_al_menu)
+        self.pantalla_combate.place(relx=0, rely=0, relwidth=1, relheight=1)
+
+    def volver_al_menu(self):
+        # 1. Destruir la pantalla de combate
+        if hasattr(self, 'pantalla_combate'):
+            self.pantalla_combate.destroy()
+        
+        # 2. Reiniciar música de selección
+        self._iniciar_musica_seleccion()
+            
+        # 3. Volver a mostrar los elementos del menú
+        self.left.place(relx=0.05, rely=0.1, relwidth=0.25, relheight=0.6)
+        self.center.place(relx=0.35, rely=0.1, relwidth=0.30, relheight=0.55)
+        self.right.place(relx=0.70, rely=0.1, relwidth=0.25, relheight=0.55)
+        self.carousel_container.place(relx=0, rely=0.78, relwidth=1, relheight=0.22)
+        
+        self.btn_batalla.place(relx=0.5, rely=0.08, anchor="center")
+        self.btn_add.place(relx=0.5, rely=0.68, anchor="center")
+        
+        # Limpiar equipo para una nueva partida
+        self.selected = []
+        self.update_all()
+#-------------------------------------------------
+if __name__ == "__main__":
+    root = tk.Tk()
+    App(root)
+    root.mainloop()
