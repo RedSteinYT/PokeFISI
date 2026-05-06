@@ -5,8 +5,14 @@ import os
 import sys
 import random
 from PIL import Image, ImageTk, ImageSequence
-import pygame
 from pokemones import all_pokemons
+
+try:
+    import pygame
+    PYGAME_DISPONIBLE = True
+except ImportError:
+    PYGAME_DISPONIBLE = False
+    print("Advertencia: pygame no está disponible. La música estará desactivada.")
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(BASE_DIR))
@@ -182,11 +188,12 @@ class App:
         self.cache = {}
 
         # Inicializar pygame.mixer para música
-        try:
-            pygame.mixer.init()
-            self._iniciar_musica_seleccion()
-        except Exception as e:
-            print(f"Error inicializando audio: {e}")
+        if PYGAME_DISPONIBLE:
+            try:
+                pygame.mixer.init()
+                self._iniciar_musica_seleccion()
+            except Exception as e:
+                print(f"Error inicializando audio: {e}")
 
         if not POKEMONS:
             messagebox.showerror("Error", "No se encontraron datos en pokemons.json")
@@ -199,6 +206,8 @@ class App:
     # MÚSICA
     # ==========================================
     def _iniciar_musica_seleccion(self):
+        if not PYGAME_DISPONIBLE:
+            return
         try:
             ruta_musica = path("assets", "music", "seleccion.mp3")
             if os.path.exists(ruta_musica):
@@ -208,6 +217,8 @@ class App:
             print(f"Error reproduciendo música de selección: {e}")
 
     def _detener_musica(self):
+        if not PYGAME_DISPONIBLE:
+            return
         try:
             if pygame.mixer.music.get_busy():
                 pygame.mixer.music.stop()

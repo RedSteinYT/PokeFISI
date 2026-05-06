@@ -37,7 +37,7 @@ class AgenteHeuristicoBasico:
 
         # Simula los 4 ataques en su "mente" para ver cuál quita más vida
         for i, mov in enumerate(atacante.movimientos):
-            dano = batalla.calcular_dano(atacante, defensor, mov)
+            dano = batalla.calcular_dano(atacante, defensor, mov)[0]
             if dano > mejor_dano:
                 mejor_dano = dano
                 mejor_mov_idx = i

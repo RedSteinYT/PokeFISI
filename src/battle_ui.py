@@ -3,10 +3,16 @@ from tkinter import messagebox
 from PIL import Image, ImageTk
 import os
 import random
-import pygame
+
+try:
+    import pygame
+    PYGAME_DISPONIBLE = True
+except ImportError:
+    PYGAME_DISPONIBLE = False
+    print("Advertencia: pygame no está disponible. La música estará desactivada.")
 
 # Importamos nuestra lógica
-from src.game_logic import Combate, cargar_equipos_desde_json, guardar_equipos_en_json
+from src.combate import Combate, cargar_equipos_desde_json, guardar_equipos_en_json
 
 class PantallaBatalla(tk.Frame):
     def __init__(self, parent, nombres_jugador, al_terminar):
@@ -21,16 +27,18 @@ class PantallaBatalla(tk.Frame):
         
         self.ruta_equipos = ruta_equipos
         self.batalla = Combate(equipo_jugador, equipo_ia)
+        self._cambio_forzado = False
         guardar_equipos_en_json(self.ruta_equipos, self.batalla.equipo1, self.batalla.equipo2)
         
         # Iniciar música de batalla
-        try:
-            ruta_musica = os.path.join(os.path.dirname(__file__), "..", "assets", "music", "batalla.mp3")
-            if os.path.exists(ruta_musica):
-                pygame.mixer.music.load(ruta_musica)
-                pygame.mixer.music.play(-1)  # -1 para bucle infinito
-        except Exception as e:
-            print(f"Error reproduciendo música de batalla: {e}")
+        if PYGAME_DISPONIBLE:
+            try:
+                ruta_musica = os.path.join(os.path.dirname(__file__), "..", "assets", "music", "batalla.mp3")
+                if os.path.exists(ruta_musica):
+                    pygame.mixer.music.load(ruta_musica)
+                    pygame.mixer.music.play(-1)  # -1 para bucle infinito
+            except Exception as e:
+                print(f"Error reproduciendo música de batalla: {e}")
         
         # 2. Configurar Interfaz
         self.config(bg="#f4fcf2") # Color de fondo
@@ -206,8 +214,9 @@ class PantallaBatalla(tk.Frame):
         else:
             self.btn_luchar.config(state="normal", text="LUCHAR")
 
-    def mostrar_cambio_pokemon(self):
+    def mostrar_cambio_pokemon(self, es_forzado=False):
         self.menu_acciones.place_forget()
+        self._cambio_forzado = es_forzado
         self._crear_popup_cambio()
 
     def _verificar_cambios_forzados(self):
@@ -217,7 +226,7 @@ class PantallaBatalla(tk.Frame):
         if self.batalla.pokemon_actual1.esta_debilitado():
             self.escribir_mensaje("¡Tu Pokémon se debilitó! Elige otro para continuar.")
             self._actualizar_boton_luchar()
-            self.mostrar_cambio_pokemon()
+            self.mostrar_cambio_pokemon(es_forzado=True)
             return True
 
         if self.batalla.pokemon_actual2.esta_debilitado():
@@ -302,7 +311,11 @@ class PantallaBatalla(tk.Frame):
             self.popup_cambio.destroy()
         self.menu_acciones.place(x=500, y=20)
 
-    def _seleccionar_pokemon_cambio(self, idx):
+    def _seleccionar_pokemon_cambio(self, idx, es_forzado=None):
+        if es_forzado is None:
+            es_forzado = self._cambio_forzado
+        self._cambio_forzado = False
+
         if self.batalla.equipo1[idx] == self.batalla.pokemon_actual1:
             self.escribir_mensaje("Ese Pokémon ya está en combate.")
             self._cerrar_popup_cambio()
@@ -312,8 +325,29 @@ class PantallaBatalla(tk.Frame):
             self._cerrar_popup_cambio()
             return
 
+        viejo = self.batalla.pokemon_actual1.name
         self._cerrar_popup_cambio()
-        self.ejecutar_turno(("CAMBIAR", idx))
+
+        if es_forzado:
+            self.batalla.pokemon_actual1 = self.batalla.equipo1[idx]
+            self.escribir_mensaje(f"¡{viejo} se debilitó! ¡Entra {self.batalla.pokemon_actual1.name}!")
+            self.actualizar_hud()
+
+            if self.batalla.pokemon_actual2.esta_debilitado():
+                opciones = [i for i, p in enumerate(self.batalla.equipo2) if not p.esta_debilitado() and p != self.batalla.pokemon_actual2]
+                if opciones:
+                    indice = random.choice(opciones)
+                    viejo_ia = self.batalla.pokemon_actual2.name
+                    self.batalla.pokemon_actual2 = self.batalla.equipo2[indice]
+                    self.escribir_mensaje(f"El rival retira a {viejo_ia} y envía a {self.batalla.pokemon_actual2.name}.")
+                    self.actualizar_hud()
+
+            self.batalla.turno_actual += 1
+            guardar_equipos_en_json(self.ruta_equipos, self.batalla.equipo1, self.batalla.equipo2)
+            self._actualizar_boton_luchar()
+            self.menu_acciones.place(x=500, y=20)
+        else:
+            self.ejecutar_turno(("CAMBIAR", idx))
 
     def ejecutar_turno(self, accion_jugador):
         self.ocultar_ataques()
@@ -326,11 +360,19 @@ class PantallaBatalla(tk.Frame):
 
         # Resolver
         logs = self.batalla.resolver_turno(accion_jugador, accion_ia)
+        
+        # Logging en consola
+        pokemon_jugador = self.batalla.pokemon_actual1.name
+        pokemon_ia = self.batalla.pokemon_actual2.name
+        nombre_mov_jugador = self.batalla.pokemon_actual1.movimientos[accion_jugador[1]].name if accion_jugador[0] == "ATACAR" else f"Cambio a {self.batalla.equipo1[accion_jugador[1]].name}"
+        nombre_mov_ia = self.batalla.pokemon_actual2.movimientos[accion_ia[1]].name if accion_ia[0] == "ATACAR" else f"Cambio a {self.batalla.equipo2[accion_ia[1]].name}"
+        
         self.procesar_logs(logs)
 
     def procesar_logs(self, logs):
         if logs:
             msg = logs.pop(0)
+            
             self.escribir_mensaje(msg)
             self.actualizar_hud()
             self.parent.after(1200, lambda: self.procesar_logs(logs)) # Pausa de 1.2 segundos por mensaje
@@ -344,10 +386,11 @@ class PantallaBatalla(tk.Frame):
         resultado = self.batalla.juego_terminado()
         if resultado != 0:
             ganador = "¡GANASTE!" if resultado == 1 else "¡PERDISTE! Ganó la IA."
-            try:
-                if pygame.mixer.music.get_busy():
-                    pygame.mixer.music.stop()
-            except Exception as e:
-                print(f"Error deteniendo música: {e}")
+            if PYGAME_DISPONIBLE:
+                try:
+                    if pygame.mixer.music.get_busy():
+                        pygame.mixer.music.stop()
+                except Exception as e:
+                    print(f"Error deteniendo música: {e}")
             messagebox.showinfo("Fin del Combate", ganador)
             self.al_terminar() # Llama a la función de main.py para volver

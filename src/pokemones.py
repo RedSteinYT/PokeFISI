@@ -1,9 +1,112 @@
 import random
 import os
-import pygame
+import json
+
+try:
+    import pygame
+    PYGAME_DISPONIBLE = True
+except ImportError:
+    PYGAME_DISPONIBLE = False
+    print("Advertencia: pygame no está disponible. La funcionalidad de sprites estará limitada.")
 
 base_path = os.path.dirname(__file__)
 img_path = os.path.join(base_path, '..', 'img')
+
+TIPOS = [
+    "Normal", "Fuego", "Agua", "Planta", "Eléctrico", "Hielo",
+    "Lucha", "Veneno", "Tierra", "Volador", "Psíquico", "Bicho",
+    "Roca", "Fantasma", "Dragón", "Siniestro", "Acero", "Hada"
+]
+
+EFECTIVIDAD_TIPOS = {
+    ("Normal", "Roca"): 0.5, ("Normal", "Fantasma"): 0, ("Normal", "Acero"): 0.5,
+    ("Fuego", "Fuego"): 0.5, ("Fuego", "Agua"): 0.5, ("Fuego", "Planta"): 2,
+    ("Fuego", "Hielo"): 2, ("Fuego", "Bicho"): 2, ("Fuego", "Roca"): 0.5,
+    ("Fuego", "Dragón"): 0.5, ("Fuego", "Acero"): 2, ("Fuego", "Hada"): 2,
+    ("Agua", "Fuego"): 2, ("Agua", "Agua"): 0.5, ("Agua", "Planta"): 0.5,
+    ("Agua", "Tierra"): 2, ("Agua", "Roca"): 2, ("Agua", "Dragón"): 0.5,
+    ("Planta", "Fuego"): 0.5, ("Planta", "Agua"): 2, ("Planta", "Planta"): 0.5,
+    ("Planta", "Tierra"): 2, ("Planta", "Volador"): 0.5, ("Planta", "Bicho"): 0.5,
+    ("Planta", "Roca"): 2, ("Planta", "Dragón"): 0.5, ("Planta", "Acero"): 0.5,
+    ("Planta", "Hada"): 0.5,
+    ("Eléctrico", "Agua"): 2, ("Eléctrico", "Planta"): 0.5, ("Eléctrico", "Eléctrico"): 0.5,
+    ("Eléctrico", "Tierra"): 0, ("Eléctrico", "Volador"): 2, ("Eléctrico", "Dragón"): 0.5,
+    ("Eléctrico", "Acero"): 0.5,
+    ("Hielo", "Fuego"): 0.5, ("Hielo", "Agua"): 0.5, ("Hielo", "Planta"): 2,
+    ("Hielo", "Tierra"): 2, ("Hielo", "Volador"): 2, ("Hielo", "Dragón"): 2,
+    ("Hielo", "Acero"): 0.5, ("Hielo", "Hada"): 2,
+    ("Lucha", "Normal"): 2, ("Lucha", "Hielo"): 2, ("Lucha", "Veneno"): 0.5,
+    ("Lucha", "Volador"): 0.5, ("Lucha", "Psíquico"): 0.5, ("Lucha", "Bicho"): 0.5,
+    ("Lucha", "Roca"): 2, ("Lucha", "Fantasma"): 0, ("Lucha", "Siniestro"): 2,
+    ("Lucha", "Acero"): 2, ("Lucha", "Hada"): 0.5,
+    ("Veneno", "Planta"): 2, ("Veneno", "Tierra"): 0.5, ("Veneno", "Roca"): 0.5,
+    ("Veneno", "Fantasma"): 0.5, ("Veneno", "Acero"): 0, ("Veneno", "Hada"): 2,
+    ("Tierra", "Fuego"): 2, ("Tierra", "Planta"): 0.5, ("Tierra", "Eléctrico"): 2,
+    ("Tierra", "Hielo"): 0.5, ("Tierra", "Veneno"): 2, ("Tierra", "Volador"): 0,
+    ("Tierra", "Bicho"): 0.5, ("Tierra", "Roca"): 2, ("Tierra", "Acero"): 2,
+    ("Volador", "Eléctrico"): 0.5, ("Volador", "Planta"): 2, ("Volador", "Lucha"): 2,
+    ("Volador", "Bicho"): 2, ("Volador", "Tierra"): 1, ("Volador", "Roca"): 0.5,
+    ("Volador", "Acero"): 0.5,
+    ("Psíquico", "Lucha"): 2, ("Psíquico", "Veneno"): 2, ("Psíquico", "Psíquico"): 0.5,
+    ("Psíquico", "Bicho"): 0.5, ("Psíquico", "Fantasma"): 0, ("Psíquico", "Siniestro"): 0,
+    ("Psíquico", "Acero"): 0.5,
+    ("Bicho", "Fuego"): 0.5, ("Bicho", "Planta"): 2, ("Bicho", "Lucha"): 0.5,
+    ("Bicho", "Veneno"): 0.5, ("Bicho", "Volador"): 0.5, ("Bicho", "Fantasma"): 0.5,
+    ("Bicho", "Siniestro"): 2, ("Bicho", "Acero"): 0.5, ("Bicho", "Hada"): 0.5,
+    ("Roca", "Fuego"): 2, ("Roca", "Hielo"): 2, ("Roca", "Lucha"): 0.5,
+    ("Roca", "Tierra"): 0.5, ("Roca", "Volador"): 2, ("Roca", "Bicho"): 2,
+    ("Roca", "Acero"): 0.5,
+    ("Fantasma", "Normal"): 0, ("Fantasma", "Psíquico"): 2, ("Fantasma", "Fantasma"): 2,
+    ("Fantasma", "Siniestro"): 0.5, ("Fantasma", "Acero"): 0.5, ("Fantasma", "Hada"): 0,
+    ("Dragón", "Dragón"): 2, ("Dragón", "Acero"): 0.5, ("Dragón", "Hada"): 0,
+    ("Siniestro", "Lucha"): 0.5, ("Siniestro", "Psíquico"): 2, ("Siniestro", "Fantasma"): 2,
+    ("Siniestro", "Siniestro"): 0.5, ("Siniestro", "Acero"): 0.5, ("Siniestro", "Hada"): 0.5,
+    ("Acero", "Fuego"): 0.5, ("Acero", "Agua"): 0.5, ("Acero", "Eléctrico"): 0.5,
+    ("Acero", "Hielo"): 2, ("Acero", "Roca"): 2, ("Acero", "Acero"): 0.5,
+    ("Acero", "Hada"): 2,
+    ("Hada", "Fuego"): 0.5, ("Hada", "Lucha"): 2, ("Hada", "Veneno"): 0.5,
+    ("Hada", "Siniestro"): 2, ("Hada", "Acero"): 0.5, ("Hada", "Dragón"): 0,
+}
+
+def obtener_efectividad(tipo_ataque, tipo_defensor1, tipo_defensor2=None):
+    clave = (tipo_ataque, tipo_defensor1)
+    multiplicador = EFECTIVIDAD_TIPOS.get(clave, 1.0)
+    
+    if tipo_defensor2 and tipo_defensor2 not in ("null", None, ""):
+        clave2 = (tipo_ataque, tipo_defensor2)
+        multiplicador *= EFECTIVIDAD_TIPOS.get(clave2, 1.0)
+    
+    return multiplicador
+
+
+def cargar_movimientos_json():
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    try:
+        with open(os.path.join(base_dir, "..", "data", "pokemons.json"), encoding="utf-8") as f:
+            data = json.load(f)
+            moves_dict = {}
+            for pokemon in data:
+                moves_dict[pokemon["name"]] = pokemon.get("moves", [])
+            return moves_dict
+    except Exception as e:
+        print(f"Error cargando movimientos: {e}")
+        return {}
+
+
+MOVIMIENTOS_DATA = cargar_movimientos_json()
+
+
+class Movimiento:
+    def __init__(self, name, power, accuracy, move_type, category="physical"):
+        self.name = name
+        self.power = power
+        self.accuracy = accuracy
+        self.type = move_type
+        self.category = category.lower() if isinstance(category, str) else "physical"
+    
+    def __repr__(self):
+        return f"Movimiento({self.name}, pow={self.power}, acc={self.accuracy}, tipo={self.type})"
+
 
 class Pokemon:
     def __init__(
@@ -62,7 +165,37 @@ class Pokemon:
         self.inicio_b = 0
         self.duracion_frame = 100
 
+        self.movimientos = self._cargar_movimientos_desde_json()
+    
+    def _cargar_movimientos_desde_json(self):
+        moves_data = MOVIMIENTOS_DATA.get(self.nombre, [])
+        if not moves_data:
+            return []
+        cantidad = min(4, len(moves_data))
+        seleccionados = random.sample(moves_data, cantidad)
+        return [
+            Movimiento(
+                m.get("name", ""),
+                m.get("power", 0),
+                m.get("accuracy", 100),
+                m.get("type", "Normal"),
+                m.get("category", "physical"),
+            )
+            for m in seleccionados
+        ]
+    
+    def obtener_movimientos(self):
+        return self.movimientos
+    
+    def esta_debilitado(self):
+        return getattr(self, 'current_hp', self.ps) <= 0
+    
+    def calcular_efectividad(self, tipo_ataque):
+        return obtener_efectividad(tipo_ataque, self.type1, self.type2)
+
     def load_sprites(self, nuevo_tamano=(200, 200), image_folder=img_path):
+        if not PYGAME_DISPONIBLE:
+            return
         temp_s1 = pygame.image.load(os.path.join(image_folder, self.sprite1)).convert_alpha()
         temp_s2 = pygame.image.load(os.path.join(image_folder, self.sprite2)).convert_alpha()
         temp_b1 = pygame.image.load(os.path.join(image_folder, self.back_sprite1)).convert_alpha()
@@ -74,6 +207,8 @@ class Pokemon:
         self.b2 = pygame.transform.scale(temp_b2, nuevo_tamano)
 
     def activar_animacion(self, vista="frente"):
+        if not PYGAME_DISPONIBLE:
+            return
         if vista == "frente":
             self.animando_f = True
             self.inicio_f = pygame.time.get_ticks()
@@ -82,6 +217,8 @@ class Pokemon:
             self.inicio_b = pygame.time.get_ticks()
 
     def actualizar(self):
+        if not PYGAME_DISPONIBLE:
+            return
         ahora = pygame.time.get_ticks()
 
         if self.animando_f:
@@ -101,6 +238,8 @@ class Pokemon:
                 self.frame_b = 1
 
     def dibujar(self, superficie, pos, vista="frente"):
+        if not PYGAME_DISPONIBLE:
+            return
         if vista == "frente":
             img = self.s2 if self.frame_f == 2 else self.s1
         else:
