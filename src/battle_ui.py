@@ -3,6 +3,7 @@ from tkinter import messagebox
 from PIL import Image, ImageTk
 import os
 import random
+import json
 
 try:
     import pygame
@@ -12,7 +13,10 @@ except ImportError:
     print("Advertencia: pygame no está disponible. La música estará desactivada.")
 
 # Importamos nuestra lógica
-from src.combate import Combate, cargar_equipos_desde_json, guardar_equipos_en_json
+from src.combate import Combate, guardar_equipos_en_json
+from src.game_logic import cargar_equipo_desde_json, Pokemon
+from src.agents import AgenteAleatorio, AgenteHeuristicoHP, seleccionar_equipo_aleatorio
+import config
 
 class PantallaBatalla(tk.Frame):
     def __init__(self, parent, nombres_jugador, al_terminar):
@@ -21,9 +25,15 @@ class PantallaBatalla(tk.Frame):
         self.al_terminar = al_terminar
         self.nombres_jugador = nombres_jugador
         
-        # 1. Cargar equipos desde el JSON generado por la pantalla de selección
+        # 1. Cargar equipos
+        # Equipo del jugador (seleccionado manualmente)
         ruta_equipos = os.path.join(os.path.dirname(__file__), "..", "data", "equipos.json")
-        equipo_jugador, equipo_ia = cargar_equipos_desde_json(ruta_equipos)
+        equipo_jugador, _ = self._cargar_equipos_jugador(ruta_equipos)
+        
+        # Equipo de la IA (selección aleatoria)
+        ruta_pokemons = os.path.join(os.path.dirname(__file__), "..", "data", "pokemons.json")
+        ids_ia = seleccionar_equipo_aleatorio(ruta_pokemons, cantidad=4)
+        equipo_ia = cargar_equipo_desde_json(ruta_pokemons, ids_ia)
         
         self.ruta_equipos = ruta_equipos
         self.batalla = Combate(equipo_jugador, equipo_ia)
@@ -45,6 +55,14 @@ class PantallaBatalla(tk.Frame):
         self.crear_widgets()
         self.actualizar_hud()
         self.escribir_mensaje(f"¡El Entrenador Rival te desafía!\n¡Envió a {self.batalla.pokemon_actual2.name}!")
+
+    def _cargar_equipos_jugador(self, ruta_json):
+        """Carga solo el equipo del jugador desde equipos.json"""
+        from src.game_logic import Pokemon
+        with open(ruta_json, "r", encoding="utf-8") as f:
+            datos = json.load(f)
+        equipo = [Pokemon(p) for p in datos.get("team_jugador", [])]
+        return equipo, []
 
     def crear_widgets(self):
         # --- ZONA DE DIBUJO (CANVAS) ---
@@ -353,9 +371,11 @@ class PantallaBatalla(tk.Frame):
         self.ocultar_ataques()
         self.menu_acciones.place_forget() # Ocultar menú para que no spammee clicks
         
-        # IA Nivel 2 (Heurística Básica)
-        from src.agents import AgenteHeuristicoBasico
-        ia = AgenteHeuristicoBasico()
+        # IA del rival (según configuración)
+        if config.NIVEL_IA == "aleatorio":
+            ia = AgenteAleatorio()
+        else:
+            ia = AgenteHeuristicoHP()
         accion_ia = ia.elegir_accion(self.batalla, es_jugador_1=False)
 
         # Resolver

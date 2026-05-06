@@ -1,6 +1,7 @@
 #Este scrip enfrentará a nivel 1 vs nivel 2 en 100 combates automatizados y dirá quien gana más veces.
 from src.game_logic import Combate, cargar_equipo_desde_json
-from src.agents import AgenteAleatorio, AgenteHeuristicoBasico
+from src.agents import AgenteAleatorio, AgenteHeuristicoHP
+import config
 import random
 import os
 
@@ -36,7 +37,7 @@ def ejecutar_combate_ia(agente1, agente2, ids_equipo1, ids_equipo2, verbose=Fals
     return resultado, batalla.turno_actual
 
 if __name__ == "__main__":
-    print("🤖 Iniciando Experimento Preliminar: Nivel 1 (Aleatorio) VS Nivel 2 (Heurístico)")
+    print("==> Iniciando Experimento: Nivel 1 (Aleatorio) VS Nivel 2 (Heuristico HP)")
     
     victorias_n1 = 0
     victorias_n2 = 0
@@ -44,8 +45,13 @@ if __name__ == "__main__":
     turnos_totales = 0
     
     NUM_COMBATES = 100
+    # Jugador 1 siempre aleatorio (para comparación)
     agente_n1 = AgenteAleatorio()
-    agente_n2 = AgenteHeuristicoBasico()
+    # Jugador 2 según configuración
+    if config.NIVEL_IA == "aleatorio":
+        agente_n2 = AgenteAleatorio()
+    else:
+        agente_n2 = AgenteHeuristicoHP()
     
     for i in range(NUM_COMBATES):
         # Seleccionar 4 Pokémon al azar para cada equipo (IDs del 1 al 30)
@@ -66,9 +72,9 @@ if __name__ == "__main__":
         if (i+1) % 10 == 0:
             print(f"Progreso: {i+1}/{NUM_COMBATES} combates completados...")
 
-    print("\n📊 RESULTADOS PRELIMINARES PARA LA ENTREGA:")
+    print("\n=== RESULTADOS PRELIMINARES ===")
     print("-" * 40)
     print(f"Total de Batallas: {NUM_COMBATES}")
     print(f"Victorias Agente Aleatorio (Jugador 1): {victorias_n1} ({(victorias_n1/NUM_COMBATES)*100}%)")
-    print(f"Victorias Agente Heurístico (Jugador 2): {victorias_n2} ({(victorias_n2/NUM_COMBATES)*100}%)")
-    print(f"Duración promedio de la partida: {turnos_totales/NUM_COMBATES:.1f} turnos")
+    print(f"Victorias Agente Heuristico HP (Jugador 2): {victorias_n2} ({(victorias_n2/NUM_COMBATES)*100}%)")
+    print(f"Duracion promedio de la partida: {turnos_totales/NUM_COMBATES:.1f} turnos")
