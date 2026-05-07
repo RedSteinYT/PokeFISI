@@ -2,246 +2,35 @@
   "team_jugador": [
     {
       "id": null,
-      "name": "Garchomp",
-      "tipo1": "dragon",
+      "name": "Torterra",
+      "tipo1": "planta",
       "tipo2": "tierra",
-      "hp": 215,
-      "atk": 150,
-      "def": 156,
-      "spat": 90,
-      "spdf": 105,
-      "spe": 127,
-      "current_hp": 0,
-      "current_attack": 150,
-      "current_defense": 156,
-      "current_spat": 90,
-      "current_spdf": 105,
-      "current_speed": 127,
+      "hp": 170,
+      "atk": 161,
+      "def": 125,
+      "spat": 85,
+      "spdf": 106,
+      "spe": 118,
+      "current_hp": 170,
+      "current_attack": 161,
+      "current_defense": 125,
+      "current_spat": 85,
+      "current_spdf": 106,
+      "current_speed": 118,
       "gender": "macho",
       "state": null,
       "position": 1,
-      "img_mini": "assets/sprites_mini/garchomp.png",
-      "img_large_gif": "assets/sprites_anim/garchomp.gif",
-      "img_back": "assets/sprites_back/garchomp_back.gif",
+      "img_mini": "assets/sprites_anim/torterra.gif",
+      "img_large_gif": "assets/sprites_anim/torterra.gif",
+      "img_back": "assets/sprites_back/torterra_back.gif",
       "moves": [
         {
-          "name": "Poison Jab",
+          "name": "Seed Bomb",
           "power": 80,
-          "accuracy": 100,
-          "type": "Veneno",
-          "category": "physical"
-        },
-        {
-          "name": "Crunch",
-          "power": 80,
-          "accuracy": 100,
-          "type": "Siniestro",
-          "category": "physical"
-        },
-        {
-          "name": "Iron Head",
-          "power": 80,
-          "accuracy": 100,
-          "type": "Acero",
-          "category": "physical"
-        },
-        {
-          "name": "Stone Edge",
-          "power": 100,
-          "accuracy": 80,
-          "type": "Roca",
-          "category": "physical"
-        }
-      ]
-    },
-    {
-      "id": null,
-      "name": "Roserade",
-      "tipo1": "planta",
-      "tipo2": "veneno",
-      "hp": 135,
-      "atk": 81,
-      "def": 85,
-      "spat": 177,
-      "spdf": 126,
-      "spe": 156,
-      "current_hp": 0,
-      "current_attack": 81,
-      "current_defense": 85,
-      "current_spat": 177,
-      "current_spdf": 126,
-      "current_speed": 156,
-      "gender": "hembra",
-      "state": null,
-      "position": 2,
-      "img_mini": "assets/sprites_mini/roserade.png",
-      "img_large_gif": "assets/sprites_anim/roserade.gif",
-      "img_back": "assets/sprites_back/roserade_back.gif",
-      "moves": [
-        {
-          "name": "Sludge Bomb",
-          "power": 90,
-          "accuracy": 100,
-          "type": "Veneno",
-          "category": "physical"
-        },
-        {
-          "name": "Venoshock",
-          "power": 65,
-          "accuracy": 100,
-          "type": "Veneno",
-          "category": "physical"
-        },
-        {
-          "name": "Petal Blizzard",
-          "power": 90,
           "accuracy": 100,
           "type": "Planta",
           "category": "physical"
         },
-        {
-          "name": "Dazzling Gleam",
-          "power": 80,
-          "accuracy": 100,
-          "type": "Hada",
-          "category": "physical"
-        }
-      ]
-    },
-    {
-      "id": null,
-      "name": "Magnezone",
-      "tipo1": "eléctrico",
-      "tipo2": "acero",
-      "hp": 145,
-      "atk": 81,
-      "def": 135,
-      "spat": 200,
-      "spdf": 111,
-      "spe": 112,
-      "current_hp": 0,
-      "current_attack": 81,
-      "current_defense": 135,
-      "current_spat": 200,
-      "current_spdf": 111,
-      "current_speed": 112,
-      "gender": null,
-      "state": null,
-      "position": 3,
-      "img_mini": "assets/sprites_mini/magnezone.png",
-      "img_large_gif": "assets/sprites_anim/magnezone.gif",
-      "img_back": "assets/sprites_back/magnezone_back.gif",
-      "moves": [
-        {
-          "name": "Discharge",
-          "power": 80,
-          "accuracy": 100,
-          "type": "Eléctrico",
-          "category": "physical"
-        },
-        {
-          "name": "Signal Beam",
-          "power": 75,
-          "accuracy": 100,
-          "type": "Bicho",
-          "category": "physical"
-        },
-        {
-          "name": "Volt Switch",
-          "power": 70,
-          "accuracy": 100,
-          "type": "Eléctrico",
-          "category": "physical"
-        },
-        {
-          "name": "Tri Attack",
-          "power": 80,
-          "accuracy": 100,
-          "type": "Normal",
-          "category": "physical"
-        }
-      ]
-    },
-    {
-      "id": null,
-      "name": "Froslass",
-      "tipo1": "hielo",
-      "tipo2": "fantasma",
-      "hp": 145,
-      "atk": 132,
-      "def": 90,
-      "spat": 90,
-      "spdf": 91,
-      "spe": 178,
-      "current_hp": 0,
-      "current_attack": 132,
-      "current_defense": 90,
-      "current_spat": 90,
-      "current_spdf": 91,
-      "current_speed": 178,
-      "gender": "hembra",
-      "state": null,
-      "position": 4,
-      "img_mini": "assets/sprites_mini/froslass.png",
-      "img_large_gif": "assets/sprites_anim/froslass.gif",
-      "img_back": "assets/sprites_back/froslass_back.gif",
-      "moves": [
-        {
-          "name": "Draining Kiss",
-          "power": 50,
-          "accuracy": 100,
-          "type": "Hada",
-          "category": "physical"
-        },
-        {
-          "name": "Ice Beam",
-          "power": 90,
-          "accuracy": 100,
-          "type": "Hielo",
-          "category": "physical"
-        },
-        {
-          "name": "Icy Wind",
-          "power": 55,
-          "accuracy": 95,
-          "type": "Hielo",
-          "category": "physical"
-        },
-        {
-          "name": "Ominous Wind",
-          "power": 60,
-          "accuracy": 100,
-          "type": "Fantasma",
-          "category": "physical"
-        }
-      ]
-    }
-  ],
-  "team_ia": [
-    {
-      "id": null,
-      "name": "Electivire",
-      "tipo1": "eléctrico",
-      "tipo2": null,
-      "hp": 169,
-      "atk": 192,
-      "def": 101,
-      "spat": 115,
-      "spdf": 94,
-      "spe": 115,
-      "current_hp": 10,
-      "current_attack": 192,
-      "current_defense": 101,
-      "current_spat": 115,
-      "current_spdf": 94,
-      "current_speed": 115,
-      "gender": "macho",
-      "state": null,
-      "position": 1,
-      "img_mini": "assets/sprites_mini/electivire.png",
-      "img_large_gif": "assets/sprites_anim/electivire.gif",
-      "img_back": "assets/sprites_back/electivire_back.gif",
-      "moves": [
         {
           "name": "Earthquake",
           "power": 100,
@@ -250,24 +39,17 @@
           "category": "physical"
         },
         {
-          "name": "Thunder Punch",
-          "power": 75,
-          "accuracy": 100,
-          "type": "Eléctrico",
-          "category": "physical"
-        },
-        {
-          "name": "Fire Punch",
-          "power": 75,
-          "accuracy": 100,
-          "type": "Fuego",
-          "category": "physical"
-        },
-        {
-          "name": "Cross Chop",
+          "name": "Stone Edge",
           "power": 100,
           "accuracy": 80,
-          "type": "Lucha",
+          "type": "Roca",
+          "category": "physical"
+        },
+        {
+          "name": "Wood Hammer",
+          "power": 120,
+          "accuracy": 100,
+          "type": "Planta",
           "category": "physical"
         }
       ]
@@ -283,24 +65,24 @@
       "spat": 156,
       "spdf": 91,
       "spe": 176,
-      "current_hp": 151,
+      "current_hp": 0,
       "current_attack": 111,
       "current_defense": 92,
       "current_spat": 156,
       "current_spdf": 91,
       "current_speed": 176,
-      "gender": "hembra",
+      "gender": "macho",
       "state": null,
       "position": 2,
-      "img_mini": "assets/sprites_mini/infernape.png",
+      "img_mini": "assets/sprites_anim/infernape.gif",
       "img_large_gif": "assets/sprites_anim/infernape.gif",
       "img_back": "assets/sprites_back/infernape_back.gif",
       "moves": [
         {
-          "name": "Mach Punch",
-          "power": 40,
+          "name": "Thunder Punch",
+          "power": 75,
           "accuracy": 100,
-          "type": "Lucha",
+          "type": "Eléctrico",
           "category": "physical"
         },
         {
@@ -311,71 +93,17 @@
           "category": "physical"
         },
         {
-          "name": "Thunder Punch",
+          "name": "Fire Punch",
           "power": 75,
           "accuracy": 100,
-          "type": "Eléctrico",
+          "type": "Fuego",
           "category": "physical"
         },
         {
-          "name": "Poison Jab",
-          "power": 80,
+          "name": "Mach Punch",
+          "power": 40,
           "accuracy": 100,
-          "type": "Veneno",
-          "category": "physical"
-        }
-      ]
-    },
-    {
-      "id": null,
-      "name": "Mismagius",
-      "tipo1": "fantasma",
-      "tipo2": null,
-      "hp": 135,
-      "atk": 72,
-      "def": 81,
-      "spat": 157,
-      "spdf": 125,
-      "spe": 172,
-      "current_hp": 0,
-      "current_attack": 72,
-      "current_defense": 81,
-      "current_spat": 157,
-      "current_spdf": 125,
-      "current_speed": 172,
-      "gender": "macho",
-      "state": null,
-      "position": 3,
-      "img_mini": "assets/sprites_mini/mismagius.png",
-      "img_large_gif": "assets/sprites_anim/mismagius.gif",
-      "img_back": "assets/sprites_back/mismagius_back.gif",
-      "moves": [
-        {
-          "name": "Dazzling Gleam",
-          "power": 80,
-          "accuracy": 100,
-          "type": "Hada",
-          "category": "physical"
-        },
-        {
-          "name": "Psychic",
-          "power": 90,
-          "accuracy": 100,
-          "type": "Psíquico",
-          "category": "physical"
-        },
-        {
-          "name": "Power Gem",
-          "power": 80,
-          "accuracy": 100,
-          "type": "Roca",
-          "category": "physical"
-        },
-        {
-          "name": "Energy Ball",
-          "power": 90,
-          "accuracy": 100,
-          "type": "Planta",
+          "type": "Lucha",
           "category": "physical"
         }
       ]
@@ -399,23 +127,23 @@
       "current_speed": 107,
       "gender": "hembra",
       "state": null,
-      "position": 4,
-      "img_mini": "assets/sprites_mini/empoleon.png",
+      "position": 3,
+      "img_mini": "assets/sprites_anim/empoleon.gif",
       "img_large_gif": "assets/sprites_anim/empoleon.gif",
       "img_back": "assets/sprites_back/empoleon_back.gif",
       "moves": [
+        {
+          "name": "Steel Wing",
+          "power": 70,
+          "accuracy": 90,
+          "type": "Acero",
+          "category": "physical"
+        },
         {
           "name": "Ice Beam",
           "power": 90,
           "accuracy": 100,
           "type": "Hielo",
-          "category": "physical"
-        },
-        {
-          "name": "Aqua Jet",
-          "power": 40,
-          "accuracy": 100,
-          "type": "Agua",
           "category": "physical"
         },
         {
@@ -426,10 +154,282 @@
           "category": "physical"
         },
         {
+          "name": "Surf",
+          "power": 90,
+          "accuracy": 100,
+          "type": "Agua",
+          "category": "physical"
+        }
+      ]
+    },
+    {
+      "id": null,
+      "name": "Staraptor",
+      "tipo1": "normal",
+      "tipo2": "vuelo",
+      "hp": 160,
+      "atk": 172,
+      "def": 91,
+      "spat": 63,
+      "spdf": 80,
+      "spe": 167,
+      "current_hp": 38,
+      "current_attack": 172,
+      "current_defense": 91,
+      "current_spat": 63,
+      "current_spdf": 80,
+      "current_speed": 167,
+      "gender": "macho",
+      "state": null,
+      "position": 4,
+      "img_mini": "assets/sprites_anim/staraptor.gif",
+      "img_large_gif": "assets/sprites_anim/staraptor.gif",
+      "img_back": "assets/sprites_back/staraptor_back.gif",
+      "moves": [
+        {
+          "name": "Double-Edge",
+          "power": 120,
+          "accuracy": 100,
+          "type": "Normal",
+          "category": "physical"
+        },
+        {
+          "name": "Close Combat",
+          "power": 120,
+          "accuracy": 100,
+          "type": "Lucha",
+          "category": "physical"
+        },
+        {
+          "name": "Aerial Ace",
+          "power": 60,
+          "accuracy": 100,
+          "type": "Volador",
+          "category": "physical"
+        },
+        {
           "name": "Steel Wing",
           "power": 70,
           "accuracy": 90,
           "type": "Acero",
+          "category": "physical"
+        }
+      ]
+    }
+  ],
+  "team_ia": [
+    {
+      "id": null,
+      "name": "Hippowdon",
+      "tipo1": "tierra",
+      "tipo2": null,
+      "hp": 214,
+      "atk": 132,
+      "def": 167,
+      "spat": 79,
+      "spdf": 111,
+      "spe": 67,
+      "current_hp": 214,
+      "current_attack": 132,
+      "current_defense": 167,
+      "current_spat": 79,
+      "current_spdf": 111,
+      "current_speed": 67,
+      "gender": "macho",
+      "state": null,
+      "position": 1,
+      "img_mini": "assets/sprites_anim/hippowdon.gif",
+      "img_large_gif": "assets/sprites_anim/hippowdon.gif",
+      "img_back": "assets/sprites_back/hippowdon_back.gif",
+      "moves": [
+        {
+          "name": "Stone Edge",
+          "power": 100,
+          "accuracy": 80,
+          "type": "Roca",
+          "category": "physical"
+        },
+        {
+          "name": "Fire Fang",
+          "power": 65,
+          "accuracy": 95,
+          "type": "Fuego",
+          "category": "physical"
+        },
+        {
+          "name": "Earth Power",
+          "power": 90,
+          "accuracy": 100,
+          "type": "Tierra",
+          "category": "physical"
+        },
+        {
+          "name": "Ice Fang",
+          "power": 65,
+          "accuracy": 95,
+          "type": "Hielo",
+          "category": "physical"
+        }
+      ]
+    },
+    {
+      "id": null,
+      "name": "Dusknoir",
+      "tipo1": "fantasma",
+      "tipo2": null,
+      "hp": 152,
+      "atk": 167,
+      "def": 155,
+      "spat": 76,
+      "spdf": 156,
+      "spe": 65,
+      "current_hp": 152,
+      "current_attack": 167,
+      "current_defense": 155,
+      "current_spat": 76,
+      "current_spdf": 156,
+      "current_speed": 65,
+      "gender": "macho",
+      "state": null,
+      "position": 2,
+      "img_mini": "assets/sprites_anim/dusknoir.gif",
+      "img_large_gif": "assets/sprites_anim/dusknoir.gif",
+      "img_back": "assets/sprites_back/dusknoir_back.gif",
+      "moves": [
+        {
+          "name": "Shadow Punch",
+          "power": 60,
+          "accuracy": 100,
+          "type": "Fantasma",
+          "category": "physical"
+        },
+        {
+          "name": "Thunder Punch",
+          "power": 75,
+          "accuracy": 100,
+          "type": "Eléctrico",
+          "category": "physical"
+        },
+        {
+          "name": "Earthquake",
+          "power": 100,
+          "accuracy": 100,
+          "type": "Tierra",
+          "category": "physical"
+        },
+        {
+          "name": "Rock Slide",
+          "power": 75,
+          "accuracy": 90,
+          "type": "Roca",
+          "category": "physical"
+        }
+      ]
+    },
+    {
+      "id": null,
+      "name": "Porygon-Z",
+      "tipo1": "normal",
+      "tipo2": null,
+      "hp": 160,
+      "atk": 90,
+      "def": 90,
+      "spat": 205,
+      "spdf": 96,
+      "spe": 142,
+      "current_hp": 160,
+      "current_attack": 90,
+      "current_defense": 90,
+      "current_spat": 205,
+      "current_spdf": 96,
+      "current_speed": 142,
+      "gender": "null",
+      "state": null,
+      "position": 3,
+      "img_mini": "assets/sprites_anim/porygon-z.gif",
+      "img_large_gif": "assets/sprites_anim/porygon-z.gif",
+      "img_back": "assets/sprites_back/porygonz_back.gif",
+      "moves": [
+        {
+          "name": "Psychic",
+          "power": 90,
+          "accuracy": 100,
+          "type": "Psíquico",
+          "category": "physical"
+        },
+        {
+          "name": "Shadow Ball",
+          "power": 80,
+          "accuracy": 100,
+          "type": "Fantasma",
+          "category": "physical"
+        },
+        {
+          "name": "Ice Beam",
+          "power": 90,
+          "accuracy": 100,
+          "type": "Hielo",
+          "category": "physical"
+        },
+        {
+          "name": "Signal Beam",
+          "power": 75,
+          "accuracy": 100,
+          "type": "Bicho",
+          "category": "physical"
+        }
+      ]
+    },
+    {
+      "id": null,
+      "name": "Gliscor",
+      "tipo1": "tierra",
+      "tipo2": "volador",
+      "hp": 181,
+      "atk": 100,
+      "def": 150,
+      "spat": 58,
+      "spdf": 136,
+      "spe": 115,
+      "current_hp": 181,
+      "current_attack": 100,
+      "current_defense": 150,
+      "current_spat": 58,
+      "current_spdf": 136,
+      "current_speed": 115,
+      "gender": "macho",
+      "state": null,
+      "position": 4,
+      "img_mini": "assets/sprites_anim/gliscor.gif",
+      "img_large_gif": "assets/sprites_anim/gliscor.gif",
+      "img_back": "assets/sprites_back/gliscor_back.gif",
+      "moves": [
+        {
+          "name": "Ice Fang",
+          "power": 65,
+          "accuracy": 95,
+          "type": "Hielo",
+          "category": "physical"
+        },
+        {
+          "name": "Sky Attack",
+          "power": 140,
+          "accuracy": 90,
+          "type": "Volador",
+          "category": "physical"
+        },
+        {
+          "name": "Night Slash",
+          "power": 70,
+          "accuracy": 100,
+          "type": "Siniestro",
+          "category": "physical"
+        },
+        {
+          "name": "X-Scissor",
+          "power": 80,
+          "accuracy": 100,
+          "type": "Bicho",
           "category": "physical"
         }
       ]
