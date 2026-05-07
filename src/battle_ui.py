@@ -13,10 +13,41 @@ except ImportError:
     print("Advertencia: pygame no está disponible. La música estará desactivada.")
 
 # Importamos nuestra lógica
-from src.combate import Combate, guardar_equipos_en_json
-from src.game_logic import cargar_equipo_desde_json, Pokemon
+from src.combate import Combate, PokemonCombate, guardar_equipos_en_json
 from src.agents import AgenteAleatorio, AgenteHeuristicoHP, seleccionar_equipo_aleatorio
 import config
+
+def crear_equipo_desde_objetos(pokemons):
+    """Crea una lista de objetos PokemonCombate para el combate desde objetos hardcodeados."""
+    equipo = []
+    for idx, pokemon in enumerate(pokemons, start=1):
+        moves = []
+        for mov in pokemon.movimientos:
+            moves.append({
+                "name": mov.name,
+                "power": mov.power,
+                "accuracy": mov.accuracy,
+                "type": mov.type,
+                "category": mov.category,
+            })
+        equipo.append(PokemonCombate({
+            "name": pokemon.nombre,
+            "tipo1": pokemon.type1,
+            "tipo2": pokemon.type2 if pokemon.type2 != "null" else None,
+            "hp": pokemon.ps,
+            "atk": pokemon.atck,
+            "def": pokemon.dfns,
+            "spat": pokemon.spat,
+            "spdf": pokemon.spdf,
+            "spe": pokemon.vel,
+            "gender": pokemon.gender,
+            "position": idx,
+            "img_mini": pokemon.sprite1,
+            "img_large_gif": pokemon.sprite2,
+            "img_back": pokemon.back_sprite1,
+            "moves": moves,
+        }))
+    return equipo
 
 class PantallaBatalla(tk.Frame):
     def __init__(self, parent, nombres_jugador, al_terminar):
@@ -29,11 +60,10 @@ class PantallaBatalla(tk.Frame):
         # Equipo del jugador (seleccionado manualmente)
         ruta_equipos = os.path.join(os.path.dirname(__file__), "..", "data", "equipos.json")
         equipo_jugador, _ = self._cargar_equipos_jugador(ruta_equipos)
-        
-        # Equipo de la IA (selección aleatoria)
-        ruta_pokemons = os.path.join(os.path.dirname(__file__), "..", "data", "pokemons.json")
-        ids_ia = seleccionar_equipo_aleatorio(ruta_pokemons, cantidad=4)
-        equipo_ia = cargar_equipo_desde_json(ruta_pokemons, ids_ia)
+
+        # Equipo de la IA (selección aleatoria desde objetos hardcodeados)
+        pokemons_ia = seleccionar_equipo_aleatorio(cantidad=4)
+        equipo_ia = crear_equipo_desde_objetos(pokemons_ia)
         
         self.ruta_equipos = ruta_equipos
         self.batalla = Combate(equipo_jugador, equipo_ia)
@@ -58,10 +88,9 @@ class PantallaBatalla(tk.Frame):
 
     def _cargar_equipos_jugador(self, ruta_json):
         """Carga solo el equipo del jugador desde equipos.json"""
-        from src.game_logic import Pokemon
         with open(ruta_json, "r", encoding="utf-8") as f:
             datos = json.load(f)
-        equipo = [Pokemon(p) for p in datos.get("team_jugador", [])]
+        equipo = [PokemonCombate(p) for p in datos.get("team_jugador", [])]
         return equipo, []
 
     def crear_widgets(self):

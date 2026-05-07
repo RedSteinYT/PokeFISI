@@ -1,22 +1,16 @@
-# Changelog PokeFISI
+# Changelog
 
-## [En desarrollo]
+## Dependencias
 
-### Agregado
-- **Sistema de logging en consola**: Ahora se muestran todos los movimientos del jugador y de la IA en la consola durante la batalla.
-  - Formato de turno: muestra el número de turno y los nombres de los Pokémon enfrentado
-  - Acciones del jugador: prefijadas con "▶"
-  - Acciones de la IA: prefijadas con "◀"
-  - Otros mensajes: prefijados con "•"
-  - Ubicación: `src/battle_ui.py` (funciones `ejecutar_turno` y `procesar_logs`)
+### Requeridas para ejecución
+- `pillow` - Librería para procesamiento de imágenes
+- `pygame-ce` - Motor de juegos (versión Community Edition)
 
-### Cómo usar
-Para ver los logs, ejecutar el juego desde terminal:
+### Instalación
 ```bash
-python src/main.py
+pip install pillow pygame-ce
 ```
 
----
-
-## [Versiones anteriores]
-- Sin registro aún
+### Requerimientos del sistema
+- Python 3.x
+- Sistema operativo con soporte para pygame (Windows, Linux, macOS)

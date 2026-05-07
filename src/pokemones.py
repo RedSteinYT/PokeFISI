@@ -96,6 +96,26 @@ def cargar_movimientos_json():
 MOVIMIENTOS_DATA = cargar_movimientos_json()
 
 
+def cargar_sprites_json():
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    sprites_dict = {}
+    try:
+        with open(os.path.join(base_dir, "..", "data", "pokemons.json"), encoding="utf-8") as f:
+            data = json.load(f)
+            for pokemon in data:
+                name = pokemon["name"]
+                sprites_dict[name] = {
+                    "front": pokemon.get("img_large_gif", ""),
+                    "back": pokemon.get("img_back", ""),
+                }
+    except Exception as e:
+        print(f"Error cargando sprites: {e}")
+    return sprites_dict
+
+
+SPRITES_DATA = cargar_sprites_json()
+
+
 class Movimiento:
     def __init__(self, name, power, accuracy, move_type, category="physical"):
         self.name = name
@@ -147,10 +167,10 @@ class Pokemon:
         self.move3 = move3
         self.move4 = move4
 
-        self.sprite1 = sprite1
-        self.sprite2 = sprite2
-        self.back_sprite1 = back_sprite1
-        self.back_sprite2 = back_sprite2
+        self.sprite1 = SPRITES_DATA.get(nombre, {}).get("front", sprite1)
+        self.sprite2 = self.sprite1
+        self.back_sprite1 = SPRITES_DATA.get(nombre, {}).get("back", back_sprite1)
+        self.back_sprite2 = self.back_sprite1
 
         self.s1 = None
         self.s2 = None
@@ -193,18 +213,15 @@ class Pokemon:
     def calcular_efectividad(self, tipo_ataque):
         return obtener_efectividad(tipo_ataque, self.type1, self.type2)
 
-    def load_sprites(self, nuevo_tamano=(200, 200), image_folder=img_path):
+    def load_sprites(self, nuevo_tamano=(200, 200), image_folder=None):
         if not PYGAME_DISPONIBLE:
             return
-        temp_s1 = pygame.image.load(os.path.join(image_folder, self.sprite1)).convert_alpha()
-        temp_s2 = pygame.image.load(os.path.join(image_folder, self.sprite2)).convert_alpha()
-        temp_b1 = pygame.image.load(os.path.join(image_folder, self.back_sprite1)).convert_alpha()
-        temp_b2 = pygame.image.load(os.path.join(image_folder, self.back_sprite2)).convert_alpha()
-
-        self.s1 = pygame.transform.scale(temp_s1, nuevo_tamano)
-        self.s2 = pygame.transform.scale(temp_s2, nuevo_tamano)
-        self.b1 = pygame.transform.scale(temp_b1, nuevo_tamano)
-        self.b2 = pygame.transform.scale(temp_b2, nuevo_tamano)
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        assets_folder = os.path.join(base_dir, "..", "assets")
+        self.s1 = pygame.transform.scale(pygame.image.load(os.path.join(assets_folder, self.sprite1)).convert_alpha(), nuevo_tamano)
+        self.s2 = self.s1
+        self.b1 = pygame.transform.scale(pygame.image.load(os.path.join(assets_folder, self.back_sprite1)).convert_alpha(), nuevo_tamano)
+        self.b2 = self.b1
 
     def activar_animacion(self, vista="frente"):
         if not PYGAME_DISPONIBLE:

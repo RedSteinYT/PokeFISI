@@ -56,20 +56,19 @@ def cargar_pokemons_json_por_nombre():
     return datos
 
 
-def crear_datos_pokemon_para_equipo(nombre_pokemon, posicion, pokemons_json):
+def crear_datos_pokemon_para_equipo(nombre_pokemon, posicion):
     obj = obtener_pokemon_objeto(nombre_pokemon)
     if obj is None:
         return None
 
-    json_entry = pokemons_json.get(normalize_name(obj.nombre), {})
     moves = []
-    for mov in json_entry.get("moves", []):
+    for mov in obj.movimientos:
         moves.append({
-            "name": mov.get("name", ""),
-            "power": mov.get("power", 0),
-            "accuracy": mov.get("accuracy", 100),
-            "type": mov.get("type", "Normal"),
-            "category": mov.get("category", "physical"),
+            "name": mov.name,
+            "power": mov.power,
+            "accuracy": mov.accuracy,
+            "type": mov.type,
+            "category": mov.category,
         })
 
     return {
@@ -85,18 +84,17 @@ def crear_datos_pokemon_para_equipo(nombre_pokemon, posicion, pokemons_json):
         "gender": obj.gender,
         "state": None,
         "position": posicion,
-        "img_mini": json_entry.get("img_mini", ""),
-        "img_large_gif": json_entry.get("img_large_gif", ""),
-        "img_back": json_entry.get("img_back", ""),
+        "img_mini": obj.sprite1,
+        "img_large_gif": obj.sprite2,
+        "img_back": obj.back_sprite1,
         "moves": moves,
     }
 
 
 def crear_equipos_json(nombres_jugador):
-    pokemons_json = cargar_pokemons_json_por_nombre()
     equipo_jugador = []
     for idx, nombre in enumerate(nombres_jugador, start=1):
-        datos = crear_datos_pokemon_para_equipo(nombre, idx, pokemons_json)
+        datos = crear_datos_pokemon_para_equipo(nombre, idx)
         if datos:
             equipo_jugador.append(datos)
 
@@ -106,7 +104,7 @@ def crear_equipos_json(nombres_jugador):
 
     equipo_ia = []
     for idx, nombre in enumerate(nombres_ia, start=1):
-        datos = crear_datos_pokemon_para_equipo(nombre, idx, pokemons_json)
+        datos = crear_datos_pokemon_para_equipo(nombre, idx)
         if datos:
             equipo_ia.append(datos)
 

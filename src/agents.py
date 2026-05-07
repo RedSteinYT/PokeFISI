@@ -55,7 +55,7 @@ class AgenteHeuristicoHP:
         mejor_mov_idx = 0
 
         for i, mov in enumerate(mi_pokemon.movimientos):
-            dano = batalla.calcular_dano(mi_pokemon, rival_pokemon, mov)
+            dano = batalla.calcular_dano(mi_pokemon, rival_pokemon, mov)[0]
             if dano > mejor_dano:
                 mejor_dano = dano
                 mejor_mov_idx = i
@@ -66,17 +66,7 @@ class AgenteHeuristicoHP:
 # ==========================================
 # FUNCIÓN DE SELECCIÓN ALEATORIA DE EQUIPO
 # ==========================================
-def seleccionar_equipo_aleatorio(ruta_json, cantidad=4):
-    """Selecciona aleatoriamente Pokémon del JSON para la IA."""
-    import json
-    
-    with open(ruta_json, "r", encoding="utf-8") as f:
-        todos_pokemons = json.load(f)
-    
-    # Obtener todos los IDs disponibles
-    todos_ids = [p["id"] for p in todos_pokemons]
-    
-    # Seleccionar cantidad aleatoria sin repetición
-    ids_seleccionados = random.sample(todos_ids, min(cantidad, len(todos_ids)))
-    
-    return ids_seleccionados
+def seleccionar_equipo_aleatorio(cantidad=4):
+    """Selecciona aleatoriamente Pokémon de los objetos hardcodeados."""
+    from pokemones import all_pokemons
+    return random.sample(all_pokemons, min(cantidad, len(all_pokemons)))
