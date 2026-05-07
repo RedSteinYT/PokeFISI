@@ -17,7 +17,7 @@
       "current_spat": 85,
       "current_spdf": 106,
       "current_speed": 118,
-      "gender": "hembra",
+      "gender": "macho",
       "state": null,
       "position": 1,
       "img_mini": "assets/sprites_anim/torterra.gif",
@@ -25,17 +25,10 @@
       "img_back": "assets/sprites_back/torterra_back.gif",
       "moves": [
         {
-          "name": "Superpower",
-          "power": 120,
-          "accuracy": 100,
-          "type": "Lucha",
-          "category": "physical"
-        },
-        {
-          "name": "Seed Bomb",
+          "name": "Crunch",
           "power": 80,
           "accuracy": 100,
-          "type": "Planta",
+          "type": "Siniestro",
           "category": "physical"
         },
         {
@@ -46,10 +39,17 @@
           "category": "physical"
         },
         {
-          "name": "Crunch",
+          "name": "Seed Bomb",
           "power": 80,
           "accuracy": 100,
-          "type": "Siniestro",
+          "type": "Planta",
+          "category": "physical"
+        },
+        {
+          "name": "Wood Hammer",
+          "power": 120,
+          "accuracy": 100,
+          "type": "Planta",
           "category": "physical"
         }
       ]
@@ -65,13 +65,13 @@
       "spat": 156,
       "spdf": 91,
       "spe": 176,
-      "current_hp": 0,
+      "current_hp": 151,
       "current_attack": 111,
       "current_defense": 92,
       "current_spat": 156,
       "current_spdf": 91,
       "current_speed": 176,
-      "gender": "hembra",
+      "gender": "macho",
       "state": null,
       "position": 2,
       "img_mini": "assets/sprites_anim/infernape.gif",
@@ -79,10 +79,10 @@
       "img_back": "assets/sprites_back/infernape_back.gif",
       "moves": [
         {
-          "name": "Poison Jab",
-          "power": 80,
+          "name": "U-turn",
+          "power": 70,
           "accuracy": 100,
-          "type": "Veneno",
+          "type": "Bicho",
           "category": "physical"
         },
         {
@@ -93,23 +93,239 @@
           "category": "physical"
         },
         {
-          "name": "Close Combat",
-          "power": 120,
+          "name": "Fire Punch",
+          "power": 75,
           "accuracy": 100,
-          "type": "Lucha",
+          "type": "Fuego",
           "category": "physical"
         },
         {
-          "name": "Thunder Punch",
+          "name": "Poison Jab",
+          "power": 80,
+          "accuracy": 100,
+          "type": "Veneno",
+          "category": "physical"
+        }
+      ]
+    },
+    {
+      "id": null,
+      "name": "Mismagius",
+      "tipo1": "fantasma",
+      "tipo2": null,
+      "hp": 135,
+      "atk": 72,
+      "def": 81,
+      "spat": 157,
+      "spdf": 125,
+      "spe": 172,
+      "current_hp": 135,
+      "current_attack": 72,
+      "current_defense": 81,
+      "current_spat": 157,
+      "current_spdf": 125,
+      "current_speed": 172,
+      "gender": "hembra",
+      "state": null,
+      "position": 3,
+      "img_mini": "assets/sprites_anim/mismagius.gif",
+      "img_large_gif": "assets/sprites_anim/mismagius.gif",
+      "img_back": "assets/sprites_back/mismagius_back.gif",
+      "moves": [
+        {
+          "name": "Dark Pulse",
+          "power": 80,
+          "accuracy": 100,
+          "type": "Siniestro",
+          "category": "physical"
+        },
+        {
+          "name": "Dazzling Gleam",
+          "power": 80,
+          "accuracy": 100,
+          "type": "Hada",
+          "category": "physical"
+        },
+        {
+          "name": "Energy Ball",
+          "power": 90,
+          "accuracy": 100,
+          "type": "Planta",
+          "category": "physical"
+        },
+        {
+          "name": "Mystical Fire",
           "power": 75,
           "accuracy": 100,
-          "type": "Eléctrico",
+          "type": "Fuego",
+          "category": "physical"
+        }
+      ]
+    },
+    {
+      "id": null,
+      "name": "Yanmega",
+      "tipo1": "bicho",
+      "tipo2": "volador",
+      "hp": 161,
+      "atk": 86,
+      "def": 106,
+      "spat": 184,
+      "spdf": 77,
+      "spe": 147,
+      "current_hp": 161,
+      "current_attack": 86,
+      "current_defense": 106,
+      "current_spat": 184,
+      "current_spdf": 77,
+      "current_speed": 147,
+      "gender": "macho",
+      "state": null,
+      "position": 4,
+      "img_mini": "assets/sprites_anim/yanmega.gif",
+      "img_large_gif": "assets/sprites_anim/yanmega.gif",
+      "img_back": "assets/sprites_back/yanmega_back.gif",
+      "moves": [
+        {
+          "name": "Air Slash",
+          "power": 75,
+          "accuracy": 95,
+          "type": "Volador",
+          "category": "physical"
+        },
+        {
+          "name": "Psychic",
+          "power": 90,
+          "accuracy": 100,
+          "type": "Psíquico",
+          "category": "physical"
+        },
+        {
+          "name": "U-turn",
+          "power": 70,
+          "accuracy": 100,
+          "type": "Bicho",
+          "category": "physical"
+        },
+        {
+          "name": "Ancient Power",
+          "power": 60,
+          "accuracy": 100,
+          "type": "Roca",
           "category": "physical"
         }
       ]
     }
   ],
   "team_ia": [
+    {
+      "id": null,
+      "name": "Mamoswine",
+      "tipo1": "hielo",
+      "tipo2": "tierra",
+      "hp": 185,
+      "atk": 200,
+      "def": 101,
+      "spat": 81,
+      "spdf": 80,
+      "spe": 132,
+      "current_hp": 185,
+      "current_attack": 200,
+      "current_defense": 101,
+      "current_spat": 81,
+      "current_spdf": 80,
+      "current_speed": 132,
+      "gender": "hembra",
+      "state": null,
+      "position": 1,
+      "img_mini": "assets/sprites_anim/mamoswine.gif",
+      "img_large_gif": "assets/sprites_anim/mamoswine.gif",
+      "img_back": "assets/sprites_back/mamoswine_back.gif",
+      "moves": [
+        {
+          "name": "Earthquake",
+          "power": 100,
+          "accuracy": 100,
+          "type": "Tierra",
+          "category": "physical"
+        },
+        {
+          "name": "Ice Shard",
+          "power": 40,
+          "accuracy": 100,
+          "type": "Hielo",
+          "category": "physical"
+        },
+        {
+          "name": "Avalanche",
+          "power": 60,
+          "accuracy": 100,
+          "type": "Hielo",
+          "category": "physical"
+        },
+        {
+          "name": "Stone Edge",
+          "power": 100,
+          "accuracy": 80,
+          "type": "Roca",
+          "category": "physical"
+        }
+      ]
+    },
+    {
+      "id": null,
+      "name": "Spiritomb",
+      "tipo1": "fantasma",
+      "tipo2": "siniestro",
+      "hp": 157,
+      "atk": 112,
+      "def": 128,
+      "spat": 158,
+      "spdf": 129,
+      "spe": 49,
+      "current_hp": 157,
+      "current_attack": 112,
+      "current_defense": 128,
+      "current_spat": 158,
+      "current_spdf": 129,
+      "current_speed": 49,
+      "gender": "hembra",
+      "state": null,
+      "position": 2,
+      "img_mini": "assets/sprites_anim/spiritomb.gif",
+      "img_large_gif": "assets/sprites_anim/spiritomb.gif",
+      "img_back": "assets/sprites_back/spiritomb_back.gif",
+      "moves": [
+        {
+          "name": "Shadow Ball",
+          "power": 80,
+          "accuracy": 100,
+          "type": "Fantasma",
+          "category": "physical"
+        },
+        {
+          "name": "Dark Pulse",
+          "power": 80,
+          "accuracy": 100,
+          "type": "Siniestro",
+          "category": "physical"
+        },
+        {
+          "name": "Icy Wind",
+          "power": 55,
+          "accuracy": 95,
+          "type": "Hielo",
+          "category": "physical"
+        },
+        {
+          "name": "Sucker Punch",
+          "power": 70,
+          "accuracy": 100,
+          "type": "Siniestro",
+          "category": "physical"
+        }
+      ]
+    },
     {
       "id": null,
       "name": "Drapion",
@@ -121,7 +337,7 @@
       "spat": 72,
       "spdf": 95,
       "spe": 115,
-      "current_hp": 53,
+      "current_hp": 146,
       "current_attack": 156,
       "current_defense": 162,
       "current_spat": 72,
@@ -129,16 +345,16 @@
       "current_speed": 115,
       "gender": "hembra",
       "state": null,
-      "position": 1,
+      "position": 3,
       "img_mini": "assets/sprites_anim/drapion.gif",
       "img_large_gif": "assets/sprites_anim/drapion.gif",
       "img_back": "assets/sprites_back/drapion_back.gif",
       "moves": [
         {
-          "name": "Earthquake",
-          "power": 100,
-          "accuracy": 100,
-          "type": "Tierra",
+          "name": "Ice Fang",
+          "power": 65,
+          "accuracy": 95,
+          "type": "Hielo",
           "category": "physical"
         },
         {
@@ -149,16 +365,16 @@
           "category": "physical"
         },
         {
-          "name": "Poison Jab",
+          "name": "Knock Off",
+          "power": 65,
+          "accuracy": 100,
+          "type": "Siniestro",
+          "category": "physical"
+        },
+        {
+          "name": "Crunch",
           "power": 80,
           "accuracy": 100,
-          "type": "Veneno",
-          "category": "physical"
-        },
-        {
-          "name": "Knock Off",
-          "power": 65,
-          "accuracy": 100,
           "type": "Siniestro",
           "category": "physical"
         }
@@ -166,151 +382,43 @@
     },
     {
       "id": null,
-      "name": "Gallade",
-      "tipo1": "psíquico",
-      "tipo2": "lucha",
-      "hp": 143,
-      "atk": 177,
-      "def": 85,
-      "spat": 76,
-      "spdf": 136,
-      "spe": 145,
-      "current_hp": 143,
-      "current_attack": 177,
-      "current_defense": 85,
-      "current_spat": 76,
-      "current_spdf": 136,
-      "current_speed": 145,
-      "gender": "macho",
-      "state": null,
-      "position": 2,
-      "img_mini": "assets/sprites_anim/gallade.gif",
-      "img_large_gif": "assets/sprites_anim/gallade.gif",
-      "img_back": "assets/sprites_back/gallade_back.gif",
-      "moves": [
-        {
-          "name": "Knock Off",
-          "power": 65,
-          "accuracy": 100,
-          "type": "Siniestro",
-          "category": "physical"
-        },
-        {
-          "name": "Leaf Blade",
-          "power": 90,
-          "accuracy": 100,
-          "type": "Planta",
-          "category": "physical"
-        },
-        {
-          "name": "Earthquake",
-          "power": 100,
-          "accuracy": 100,
-          "type": "Tierra",
-          "category": "physical"
-        },
-        {
-          "name": "Psycho Cut",
-          "power": 70,
-          "accuracy": 100,
-          "type": "Psíquico",
-          "category": "physical"
-        }
-      ]
-    },
-    {
-      "id": null,
-      "name": "Lucario",
-      "tipo1": "lucha",
-      "tipo2": "acero",
-      "hp": 145,
-      "atk": 162,
-      "def": 90,
-      "spat": 121,
-      "spdf": 91,
-      "spe": 156,
-      "current_hp": 145,
-      "current_attack": 162,
-      "current_defense": 90,
-      "current_spat": 121,
-      "current_spdf": 91,
-      "current_speed": 156,
+      "name": "Gastrodon",
+      "tipo1": "agua",
+      "tipo2": "tierra",
+      "hp": 218,
+      "atk": 103,
+      "def": 132,
+      "spat": 112,
+      "spdf": 103,
+      "spe": 53,
+      "current_hp": 218,
+      "current_attack": 103,
+      "current_defense": 132,
+      "current_spat": 112,
+      "current_spdf": 103,
+      "current_speed": 53,
       "gender": "hembra",
       "state": null,
-      "position": 3,
-      "img_mini": "assets/sprites_anim/lucario.gif",
-      "img_large_gif": "assets/sprites_anim/lucario.gif",
-      "img_back": "assets/sprites_back/lucario_back.gif",
-      "moves": [
-        {
-          "name": "Meteor Mash",
-          "power": 90,
-          "accuracy": 90,
-          "type": "Acero",
-          "category": "physical"
-        },
-        {
-          "name": "Extreme Speed",
-          "power": 80,
-          "accuracy": 100,
-          "type": "Normal",
-          "category": "physical"
-        },
-        {
-          "name": "Flash Cannon",
-          "power": 80,
-          "accuracy": 100,
-          "type": "Acero",
-          "category": "physical"
-        },
-        {
-          "name": "Close Combat",
-          "power": 120,
-          "accuracy": 100,
-          "type": "Lucha",
-          "category": "physical"
-        }
-      ]
-    },
-    {
-      "id": null,
-      "name": "Electivire",
-      "tipo1": "eléctrico",
-      "tipo2": null,
-      "hp": 169,
-      "atk": 192,
-      "def": 101,
-      "spat": 115,
-      "spdf": 94,
-      "spe": 115,
-      "current_hp": 0,
-      "current_attack": 192,
-      "current_defense": 101,
-      "current_spat": 115,
-      "current_spdf": 94,
-      "current_speed": 115,
-      "gender": "macho",
-      "state": null,
       "position": 4,
-      "img_mini": "assets/sprites_anim/electivire.gif",
-      "img_large_gif": "assets/sprites_anim/electivire.gif",
-      "img_back": "assets/sprites_back/electivire_back.gif",
+      "img_mini": "assets/sprites_anim/gastrodon.gif",
+      "img_large_gif": "assets/sprites_anim/gastrodon.gif",
+      "img_back": "assets/sprites_back/gastrodon_back.gif",
       "moves": [
         {
-          "name": "Fire Punch",
-          "power": 75,
-          "accuracy": 100,
-          "type": "Fuego",
-          "category": "physical"
-        },
-        {
-          "name": "Ice Punch",
-          "power": 75,
+          "name": "Ice Beam",
+          "power": 90,
           "accuracy": 100,
           "type": "Hielo",
           "category": "physical"
         },
         {
+          "name": "Mud Bomb",
+          "power": 65,
+          "accuracy": 85,
+          "type": "Tierra",
+          "category": "physical"
+        },
+        {
           "name": "Earthquake",
           "power": 100,
           "accuracy": 100,
@@ -318,10 +426,10 @@
           "category": "physical"
         },
         {
-          "name": "Cross Chop",
-          "power": 100,
-          "accuracy": 80,
-          "type": "Lucha",
+          "name": "Surf",
+          "power": 90,
+          "accuracy": 100,
+          "type": "Agua",
           "category": "physical"
         }
       ]

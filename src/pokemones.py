@@ -22,16 +22,16 @@ EFECTIVIDAD_TIPOS = {
     ("Normal", "Roca"): 0.5, ("Normal", "Fantasma"): 0, ("Normal", "Acero"): 0.5,
     ("Fuego", "Fuego"): 0.5, ("Fuego", "Agua"): 0.5, ("Fuego", "Planta"): 2,
     ("Fuego", "Hielo"): 2, ("Fuego", "Bicho"): 2, ("Fuego", "Roca"): 0.5,
-    ("Fuego", "Dragón"): 0.5, ("Fuego", "Acero"): 2, ("Fuego", "Hada"): 2,
+    ("Fuego", "Dragón"): 0.5, ("Fuego", "Acero"): 2, ("Fuego", "Hada"): 2, ("Fuego", "Tierra"): 0.5,
     ("Agua", "Fuego"): 2, ("Agua", "Agua"): 0.5, ("Agua", "Planta"): 0.5,
-    ("Agua", "Tierra"): 2, ("Agua", "Roca"): 2, ("Agua", "Dragón"): 0.5,
+    ("Agua", "Tierra"): 2, ("Agua", "Roca"): 2, ("Agua", "Dragón"): 0.5, ("Agua", "Acero"): 1,
     ("Planta", "Fuego"): 0.5, ("Planta", "Agua"): 2, ("Planta", "Planta"): 0.5,
     ("Planta", "Tierra"): 2, ("Planta", "Volador"): 0.5, ("Planta", "Bicho"): 0.5,
     ("Planta", "Roca"): 2, ("Planta", "Dragón"): 0.5, ("Planta", "Acero"): 0.5,
-    ("Planta", "Hada"): 0.5,
-    ("Eléctrico", "Agua"): 2, ("Eléctrico", "Planta"): 0.5, ("Eléctrico", "Eléctrico"): 0.5,
+    ("Planta", "Hada"): 0.5, ("Planta", "Fantasma"): 1,
+    ("Eléctrico", "Fuego"): 1, ("Eléctrico", "Agua"): 2, ("Eléctrico", "Planta"): 0.5, ("Eléctrico", "Eléctrico"): 0.5,
     ("Eléctrico", "Tierra"): 0, ("Eléctrico", "Volador"): 2, ("Eléctrico", "Dragón"): 0.5,
-    ("Eléctrico", "Acero"): 0.5,
+    ("Eléctrico", "Acero"): 0.5, ("Eléctrico", "Hada"): 1,
     ("Hielo", "Fuego"): 0.5, ("Hielo", "Agua"): 0.5, ("Hielo", "Planta"): 2,
     ("Hielo", "Tierra"): 2, ("Hielo", "Volador"): 2, ("Hielo", "Dragón"): 2,
     ("Hielo", "Acero"): 0.5, ("Hielo", "Hada"): 2,
@@ -44,35 +44,118 @@ EFECTIVIDAD_TIPOS = {
     ("Tierra", "Fuego"): 2, ("Tierra", "Planta"): 0.5, ("Tierra", "Eléctrico"): 2,
     ("Tierra", "Hielo"): 0.5, ("Tierra", "Veneno"): 2, ("Tierra", "Volador"): 0,
     ("Tierra", "Bicho"): 0.5, ("Tierra", "Roca"): 2, ("Tierra", "Acero"): 2,
+    ("Tierra", "Dragón"): 1, ("Tierra", "Siniestro"): 1, ("Tierra", "Hada"): 1,
     ("Volador", "Eléctrico"): 0.5, ("Volador", "Planta"): 2, ("Volador", "Lucha"): 2,
     ("Volador", "Bicho"): 2, ("Volador", "Tierra"): 1, ("Volador", "Roca"): 0.5,
-    ("Volador", "Acero"): 0.5,
+    ("Volador", "Acero"): 0.5, ("Volador", "Fantasma"): 1, ("Volador", "Hada"): 1,
     ("Psíquico", "Lucha"): 2, ("Psíquico", "Veneno"): 2, ("Psíquico", "Psíquico"): 0.5,
     ("Psíquico", "Bicho"): 0.5, ("Psíquico", "Fantasma"): 0, ("Psíquico", "Siniestro"): 0,
-    ("Psíquico", "Acero"): 0.5,
+    ("Psíquico", "Acero"): 0.5, ("Psíquico", "Hada"): 1,
     ("Bicho", "Fuego"): 0.5, ("Bicho", "Planta"): 2, ("Bicho", "Lucha"): 0.5,
     ("Bicho", "Veneno"): 0.5, ("Bicho", "Volador"): 0.5, ("Bicho", "Fantasma"): 0.5,
     ("Bicho", "Siniestro"): 2, ("Bicho", "Acero"): 0.5, ("Bicho", "Hada"): 0.5,
+    ("Bicho", "Normal"): 1, ("Bicho", "Roca"): 1,
     ("Roca", "Fuego"): 2, ("Roca", "Hielo"): 2, ("Roca", "Lucha"): 0.5,
     ("Roca", "Tierra"): 0.5, ("Roca", "Volador"): 2, ("Roca", "Bicho"): 2,
-    ("Roca", "Acero"): 0.5,
+    ("Roca", "Acero"): 0.5, ("Roca", "Fantasma"): 1, ("Roca", "Hada"): 1,
     ("Fantasma", "Normal"): 0, ("Fantasma", "Psíquico"): 2, ("Fantasma", "Fantasma"): 2,
     ("Fantasma", "Siniestro"): 0.5, ("Fantasma", "Acero"): 0.5, ("Fantasma", "Hada"): 0,
+    ("Fantasma", "Lucha"): 1, ("Fantasma", "Veneno"): 1, ("Fantasma", "Bicho"): 1,
+    ("Fantasma", "Roca"): 1, ("Fantasma", "Dragón"): 1,
     ("Dragón", "Dragón"): 2, ("Dragón", "Acero"): 0.5, ("Dragón", "Hada"): 0,
+    ("Dragón", "Fuego"): 1, ("Dragón", "Agua"): 1, ("Dragón", "Planta"): 1,
+    ("Dragón", "Eléctrico"): 1, ("Dragón", "Hielo"): 1, ("Dragón", "Tierra"): 1,
+    ("Dragón", "Volador"): 1, ("Dragón", "Psíquico"): 1, ("Dragón", "Bicho"): 1,
+    ("Dragón", "Roca"): 1, ("Dragón", "Fantasma"): 1, ("Dragón", "Siniestro"): 1,
     ("Siniestro", "Lucha"): 0.5, ("Siniestro", "Psíquico"): 2, ("Siniestro", "Fantasma"): 2,
     ("Siniestro", "Siniestro"): 0.5, ("Siniestro", "Acero"): 0.5, ("Siniestro", "Hada"): 0.5,
+    ("Siniestro", "Fuego"): 1, ("Siniestro", "Agua"): 1, ("Siniestro", "Planta"): 1,
+    ("Siniestro", "Eléctrico"): 1, ("Siniestro", "Hielo"): 1, ("Siniestro", "Veneno"): 1,
+    ("Siniestro", "Tierra"): 1, ("Siniestro", "Volador"): 1, ("Siniestro", "Bicho"): 1,
+    ("Siniestro", "Roca"): 1, ("Siniestro", "Normal"): 1,
     ("Acero", "Fuego"): 0.5, ("Acero", "Agua"): 0.5, ("Acero", "Eléctrico"): 0.5,
     ("Acero", "Hielo"): 2, ("Acero", "Roca"): 2, ("Acero", "Acero"): 0.5,
-    ("Acero", "Hada"): 2,
+    ("Acero", "Hada"): 2, ("Acero", "Planta"): 1, ("Acero", "Tierra"): 1,
+    ("Acero", "Dragón"): 1, ("Acero", "Lucha"): 1, ("Acero", "Volador"): 1,
+    ("Acero", "Psíquico"): 1, ("Acero", "Bicho"): 1,
     ("Hada", "Fuego"): 0.5, ("Hada", "Lucha"): 2, ("Hada", "Veneno"): 0.5,
     ("Hada", "Siniestro"): 2, ("Hada", "Acero"): 0.5, ("Hada", "Dragón"): 0,
+    ("Hada", "Normal"): 1, ("Hada", "Agua"): 1, ("Hada", "Planta"): 1,
+    ("Hada", "Eléctrico"): 1, ("Hada", "Hielo"): 1, ("Hada", "Tierra"): 1,
+    ("Hada", "Volador"): 1, ("Hada", "Bicho"): 1, ("Hada", "Roca"): 1,
+    ("Hada", "Fantasma"): 1,
+    ("Normal", "Fuego"): 1, ("Normal", "Agua"): 1, ("Normal", "Planta"): 1,
+    ("Normal", "Eléctrico"): 1, ("Normal", "Hielo"): 1, ("Normal", "Lucha"): 1,
+    ("Normal", "Veneno"): 1, ("Normal", "Tierra"): 1, ("Normal", "Volador"): 1,
+    ("Normal", "Psíquico"): 1, ("Normal", "Bicho"): 1, ("Normal", "Dragón"): 1,
+    ("Normal", "Siniestro"): 1, ("Normal", "Hada"): 1,
+    ("Normal", "Hierba"): 1,
 }
 
+_TIPO_MINUSCULAS_A_MAYUSCULAS = {
+    "normal": "Normal",
+    "fuego": "Fuego",
+    "agua": "Agua",
+    "planta": "Planta",
+    "electrico": "Eléctrico",
+    "hielo": "Hielo",
+    "lucha": "Lucha",
+    "veneno": "Veneno",
+    "tierra": "Tierra",
+    "volador": "Volador",
+    "psiquico": "Psíquico",
+    "bicho": "Bicho",
+    "roca": "Roca",
+    "fantasma": "Fantasma",
+    "dragon": "Dragón",
+    "siniestro": "Siniestro",
+    "acero": "Acero",
+    "hada": "Hada",
+}
+
+_TIPO_SIN_ACENTO = {
+    "electrico": "Eléctrico",
+    "psiquico": "Psíquico",
+    "dragon": "Dragón",
+}
+
+_TIPO_CON_ACENTO = {
+    "eléctrico": "Eléctrico",
+    "psíquico": "Psíquico",
+    "dragón": "Dragón",
+    "fuego": "Fuego",
+    "agua": "Agua",
+    "planta": "Planta",
+    "hielo": "Hielo",
+    "lucha": "Lucha",
+    "veneno": "Veneno",
+    "tierra": "Tierra",
+    "volador": "Volador",
+    "psiquico": "Psíquico",
+    "bicho": "Bicho",
+    "roca": "Roca",
+    "fantasma": "Fantasma",
+    "dragon": "Dragón",
+    "siniestro": "Siniestro",
+    "acero": "Acero",
+    "hada": "Hada",
+}
+
+def _normalizar_tipo(tipo):
+    if not tipo or tipo in ("null", None, ""):
+        return None
+    tipo_str = str(tipo).lower().strip()
+    return _TIPO_SIN_ACENTO.get(tipo_str, _TIPO_CON_ACENTO.get(tipo_str, _TIPO_MINUSCULAS_A_MAYUSCULAS.get(tipo_str, None)))
+
 def obtener_efectividad(tipo_ataque, tipo_defensor1, tipo_defensor2=None):
+    tipo_ataque = _normalizar_tipo(tipo_ataque)
+    tipo_defensor1 = _normalizar_tipo(tipo_defensor1)
+    tipo_defensor2 = _normalizar_tipo(tipo_defensor2)
+    
     clave = (tipo_ataque, tipo_defensor1)
     multiplicador = EFECTIVIDAD_TIPOS.get(clave, 1.0)
     
-    if tipo_defensor2 and tipo_defensor2 not in ("null", None, ""):
+    if tipo_defensor2:
         clave2 = (tipo_ataque, tipo_defensor2)
         multiplicador *= EFECTIVIDAD_TIPOS.get(clave2, 1.0)
     
@@ -218,9 +301,16 @@ class Pokemon:
             return
         base_dir = os.path.dirname(os.path.abspath(__file__))
         assets_folder = os.path.join(base_dir, "..", "assets")
-        self.s1 = pygame.transform.scale(pygame.image.load(os.path.join(assets_folder, self.sprite1)).convert_alpha(), nuevo_tamano)
+        
+        sprite_path = self.sprite1 if os.path.dirname(self.sprite1) else os.path.join(assets_folder, self.sprite1)
+        sprite_path = os.path.normpath(sprite_path)
+        
+        back_path = self.back_sprite1 if os.path.dirname(self.back_sprite1) else os.path.join(assets_folder, self.back_sprite1)
+        back_path = os.path.normpath(back_path)
+        
+        self.s1 = pygame.transform.scale(pygame.image.load(sprite_path).convert_alpha(), nuevo_tamano)
         self.s2 = self.s1
-        self.b1 = pygame.transform.scale(pygame.image.load(os.path.join(assets_folder, self.back_sprite1)).convert_alpha(), nuevo_tamano)
+        self.b1 = pygame.transform.scale(pygame.image.load(back_path).convert_alpha(), nuevo_tamano)
         self.b2 = self.b1
 
     def activar_animacion(self, vista="frente"):
